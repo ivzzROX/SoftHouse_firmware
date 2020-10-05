@@ -1,0 +1,7 @@
+stm32f4xx_ll_bus.h:411:22:LL_AHB1_GRP1_EnableClock	24	static
+stm32f4xx_ll_bus.h:1706:22:LL_APB2_GRP1_EnableClock	24	static
+stm32f4xx_ll_usart.h:409:22:LL_USART_Enable	16	static
+stm32f4xx_ll_usart.h:1478:22:LL_USART_ConfigAsyncMode	16	static
+usart.c:3:6:MX_USART1_UART_Init	64	static
+usart.c:39:6:MX_USART2_UART_Init	4	static
+usart.c:43:6:MX_USART3_UART_Init	4	static

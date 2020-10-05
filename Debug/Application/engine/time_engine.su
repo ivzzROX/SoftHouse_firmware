@@ -1,0 +1,2 @@
+time_engine.c:7:9:is_cur_time	56	static
+time_engine.c:34:9:is_cur_day_of_week	56	static

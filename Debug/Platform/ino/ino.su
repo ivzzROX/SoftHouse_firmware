@@ -1,0 +1,3 @@
+stm32f4xx_ll_gpio.h:772:26:LL_GPIO_ReadInputPort	16	static
+ino.c:16:6:INO_Init	32	static
+ino.c:27:9:INO_GetValue	16	static

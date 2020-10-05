@@ -1,0 +1,14 @@
+stm32f4xx_ll_rcc.h:4010:22:LL_RCC_EnableRTC	4	static
+stm32f4xx_ll_rtc.h:961:22:LL_RTC_DisableInitMode	16	static
+stm32f4xx_ll_rtc.h:1062:22:LL_RTC_SetAsynchPrescaler	16	static
+stm32f4xx_ll_rtc.h:1074:22:LL_RTC_SetSynchPrescaler	16	static
+stm32f4xx_ll_rtc.h:1107:22:LL_RTC_EnableWriteProtection	16	static
+stm32f4xx_ll_rtc.h:1118:22:LL_RTC_DisableWriteProtection	16	static
+stm32f4xx_ll_rtc.h:1195:26:LL_RTC_TIME_GetHour	16	static
+stm32f4xx_ll_rtc.h:1230:26:LL_RTC_TIME_GetMinute	16	static
+stm32f4xx_ll_rtc.h:1497:26:LL_RTC_DATE_GetWeekDay	16	static
+stm32f4xx_ll_rtc.h:3051:22:LL_RTC_BAK_SetRegister	24	static
+stm32f4xx_ll_rtc.h:3089:26:LL_RTC_BAK_GetRegister	16	static
+rtc.c:3:6:RTC_Init	32	static
+rtc.c:33:6:RTC_GetTime	24	static
+rtc.c:54:6:RTC_SetTime	32	static

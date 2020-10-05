@@ -1,0 +1,2 @@
+sensor_task.c:17:6:Sensor_task	24	static
+sensor_task.c:37:6:Sensor_TaskInit	24	static
