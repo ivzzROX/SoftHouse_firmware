@@ -7,95 +7,78 @@
 
 #include <stdio.h>
 
-uint8_t bit_proces(uint16_t sen_value, struct OP* op_arr, uint16_t op_n)
+uint8_t bit_proces(struct OP* op_arr, uint16_t op_n)
 {
 	if ( op_arr[0].log == FIRST)
 	{
-		uint16_t res =  BIT_CHECK_MASK;
-		uint16_t temp = BIT_CHECK_MASK;
+		uint16_t temp = 0;
 		uint16_t state = Sensor_CheckValue(op_arr[0].addr, op_arr[0].trigger_value);
 
 		for (uint16_t i = 1; i < op_n; ++i)
 		{
 			if (op_arr[i].type == DATA)
 			{
-				if (op_arr[i].log == OR || op_arr[i].log == AND)
-				{
-					temp = Sensor_CheckValue(op_arr[i].addr, op_arr[i].trigger_value); //sen_value << (op_arr[i].shift - 1);
-				}
-				else //nor nand
-				{
-					temp = ~Sensor_CheckValue(op_arr[i].addr, op_arr[i].trigger_value);//~(sen_value << (op_arr[i].shift - 1));
-				}
+				temp = Sensor_CheckValue(op_arr[i].addr, op_arr[i].trigger_value);
 			}
 
 			if (op_arr[i].type == STATE)
 			{
-				if (op_arr[i].log == OR || op_arr[i].log == AND)
-				{
-					temp = op_arr[i].addr ? BIT_CHECK_MASK : 0x00;
-				}
-				else //nor nand
-				{
-					temp = op_arr[i].addr ? 0x00 : BIT_CHECK_MASK;;
-				}
+				temp = op_arr[i].addr;
 			}
 
 			switch (op_arr[i].log)
 			{
 			case OR:
 			{
-				temp |= state;
-				state = temp; //sen_irl << op[i].shift - 1;
-				res &= temp | BIT_CHECK_MASK;
+				state |= temp;
 				break;
 			}
 
 			case AND:
 			{
-				temp &= state;
-				state = temp;
-				res &= temp & BIT_CHECK_MASK;
+				state &= temp;
+				break;
+			}
+
+			case XOR:
+			{
+				state ^= temp;
 				break;
 			}
 
 			case NOR:
 			{
-				temp |= state;
-				state = temp; //sen_irl << op[i].shift - 1;
-				res &= ~(temp | BIT_CHECK_MASK);
+				state |= temp;
+				state = ~state;
 				break;
 			}
 
 			case NAND:
 			{
-				temp &= state;
-				state = temp;
-				res &= ~(temp & BIT_CHECK_MASK);
+				state &= temp;
+				state = ~state;
 				break;
 			}
-//			case OR_NOT:
-//			{
-//				temp |= state;
-//				state = temp;
-//				res &= temp | BIT_CHECK_MASK;
-//				break;
-//			}
-//
-//			case AND_NOT:
-//			{
-//				temp &= state;
-//				state = temp;
-//				res &= temp & BIT_CHECK_MASK;
-//				break;
-//			}
+
+			case XNOR:
+			{
+				state ^= temp;
+				state = ~state;
+				break;
+			}
+
+			case NOT:
+			{
+				state = ~state;
+				break;
+			}
 
 			default:
 				break;
 			}
 		}
 
-		return res ? 1 : 0;
+		return state;
 	}
 	return 0;
 }
@@ -121,7 +104,7 @@ uint8_t map_op_on_root(struct OP* op, struct OP_ROOT* root, uint16_t root_n)
 	return 1;
 }
 
-uint8_t start_bit_engine(uint16_t sen_val, struct OP_ROOT* root, uint16_t root_n, uint16_t ino)
+uint8_t start_bit_engine(struct OP_ROOT* root, uint16_t root_n, uint16_t ino)
 {
 	if (root == NULL)
 	{
@@ -185,7 +168,7 @@ uint8_t start_bit_engine(uint16_t sen_val, struct OP_ROOT* root, uint16_t root_n
 					}
 				}
 			}
-			root[i].result = bit_proces(sen_val, (struct OP*)root[i].operation, root[i].operation_n);
+			root[i].result = bit_proces((struct OP*)root[i].operation, root[i].operation_n);
 			break;
 		}
 	}
@@ -202,8 +185,8 @@ static const char* lg_type_to_str(enum LG log)
 	case FIRST:		return " ";
 	case OR:		return "OR ";
 	case AND:		return "AND ";
-	case OR_NOT:	return "OR [not]";
-	case AND_NOT:	return "AND [not]";
+	case NOR:		return "NOR ";
+	case NAND:		return "NAND ";
 	default:		return " ";
 	}
 }

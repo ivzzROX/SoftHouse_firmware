@@ -99,6 +99,14 @@ void Sensor_UpdateValue()
 
 uint8_t Sensor_CheckValue(uint16_t sen_addr, uint32_t value)
 {
+	if(sen_addr = 0xFFFE) {
+		return 0;
+	}
+
+	if(sen_addr = 0xFFFF) {
+		return 1;
+	}
+
 	for(uint8_t i = 0; i < SENSOR_MAX; ++i)
 	{
 		if(sensor_list[i].addr == sen_addr)

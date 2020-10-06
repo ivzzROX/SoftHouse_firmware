@@ -72,10 +72,10 @@ void ESP_SendSensorList()
 		if(sensor_list[i].addr == 0) {
 			continue;
 		}
-		sprintf(temp, "{\"SN\": %04" PRIx16 "\"TYPE\": %d},", sensor_list[i].addr, 1); //TODO: refactor sen enum
+		sprintf(temp, "{\"SN\": %04" PRIx16 "\"TYPE\": %d},", sensor_list[i].addr, sensor_list[i].type);
 		strcat(buff, temp);
 	}
-	buff[strlen(buff) - 1] = 0; // remove the last comma
+	buff[strlen(buff) - 1] = 0;
 	strcpy(buff, postfix);
 
 	ESP_SendData(url_t, 5002, buff, sizeof(buff) - 1, 1);
@@ -93,25 +93,16 @@ void ESP_Task( void * pvParameters )
 
     ESP_UpdateTime();
 
-    ESP_GetJson();
-
     while(1)
     {
-    	if(1)
-    	{
-    		ESP_SendSensorList();
-    	}
-
-    	vTaskDelay(pdMS_TO_TICKS(500));
+    	ESP_GetJson();
+    	vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
 void ESP_TaskInit( void )
 {
-	//BaseType_t xReturned;
 	TaskHandle_t xHandle = NULL;
-
-    //xReturned =
     xTaskCreate(
     				ESP_Task,      				 /* Function that implements the task. */
                     "ESP_Task",    				 /* Text name for the task. */

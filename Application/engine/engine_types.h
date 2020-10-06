@@ -5,17 +5,16 @@
 #include <stdint.h>
 #include <time.h>
 
-#define BIT_CHECK_MASK 0b1000000000000000
-
 enum LG
 {
 	FIRST = 1,
 	OR,
 	AND,
+	XOR,
 	NOR,
-	NAND
-	//OR_NOT,
-	//AND_NOT
+	NAND,
+	XNOR,
+	NOT
 };
 
 enum OP_TYPE

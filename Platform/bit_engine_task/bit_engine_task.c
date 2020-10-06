@@ -54,29 +54,29 @@ void BitEngine_task( void * pvParameters )
 
     while(1)
     {
-		//BIT ENGINE
     	for (uint8_t i = 0; i < 16; ++i)
     	{
 			if (outputs[i].branch_n == 0 || outputs[i].branch_n > 1024)
 			{
 				continue;
 			}
-			start_bit_engine(0xFFFF, outputs[i].root_par, outputs[i].branch_n, out_value);
+			start_bit_engine(outputs[i].root_par, outputs[i].branch_n, out_value);
 
-			out_value |= outputs[i].root_par[0].result << i;
+			if(outputs[i].root_par[0].result) {
+				out_value |= 1 << i;
+			} else {
+				out_value &= 0 << i;
+			}
 		}
 
-    	vTaskDelay(pdMS_TO_TICKS(500));
+    	vTaskDelay(pdMS_TO_TICKS(200));
     }
 }
 
 
 void BitEngine_TaskInit( void )
 {
-	//BaseType_t xReturned;
 	TaskHandle_t xHandle = NULL;
-
-    //xReturned =
 	xTaskCreate(
     				BitEngine_task,      			 /* Function that implements the task. */
                     "BitEngine_task",    		     /* Text name for the task. */
