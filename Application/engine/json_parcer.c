@@ -66,7 +66,7 @@ int json_get_op(const char* input, struct OP* out, struct OP_ROOT* root, struct 
 
 				if (root[j].name[0] == 'g') //telegram
 				{
-					root[j].type = TLGRM;
+					root[j].type = WEB;
 					root[j].operation = NULL;
 					root[j].operation_n = strtol(p_stt + 4, NULL, 10) + 600;
 					continue;

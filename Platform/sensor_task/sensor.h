@@ -11,11 +11,12 @@
 #include <stdint.h>
 
 #define SENSOR_MAX 		32
-#define REQ_TO_DISABLE 	6
+#define REQ_TO_DISABLE 	16
 
 enum SENSOR_TYPE
 {
-	BUTTON = '1',
+	PUSH_BUTTON = 1,
+	RS_BUTTON,
 	LIGHT,
 	TEMPERATURE
 };

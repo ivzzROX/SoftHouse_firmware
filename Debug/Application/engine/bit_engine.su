@@ -1,7 +1,7 @@
 bit_engine.c:10:9:bit_proces	24	static
-bit_engine.c:67:9:map_op_on_root	32	static
-bit_engine.c:88:9:start_bit_engine	48	static
-bit_engine.c:162:20:lg_type_to_str	16	static
-bit_engine.c:176:14:week_val_to_str	24	static
-bit_engine.c:189:14:root_name_by_id	24	static
-bit_engine.c:201:9:print_roots	48	static
+bit_engine.c:86:9:map_op_on_root	32	static
+bit_engine.c:107:9:start_bit_engine	48	static
+bit_engine.c:181:20:lg_type_to_str	16	static
+bit_engine.c:195:14:week_val_to_str	24	static
+bit_engine.c:208:14:root_name_by_id	24	static
+bit_engine.c:220:9:print_roots	48	static

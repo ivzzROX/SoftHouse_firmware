@@ -85,7 +85,7 @@ uint8_t bit_proces(struct OP* op_arr, uint16_t op_n)
 
 uint8_t map_op_on_root(struct OP* op, struct OP_ROOT* root, uint16_t root_n)
 {
-	if (root[0].type == PMO || root[0].type == INO || root[0].type == TLGRM)
+	if (root[0].type == PMO || root[0].type == INO || root[0].type == WEB)
 	{
 		return 0;
 	}
@@ -134,7 +134,7 @@ uint8_t start_bit_engine(struct OP_ROOT* root, uint16_t root_n, uint16_t ino)
 			break;
 		}
 
-		case TLGRM:
+		case WEB:
 		{
 			uint16_t tg_key = root[i].operation_n - 600;
 			root[i].result = Telegram_GetValue(tg_key);
@@ -260,7 +260,7 @@ uint8_t print_roots(struct OP_ROOT* root, uint16_t root_n)
 		case INO:
 			printf("Ext intput output %d", root[i].operation_n);
 			break;
-		case TLGRM:
+		case WEB:
 			printf("Telegram id %d", root[i].operation_n);
 			break;
 		}

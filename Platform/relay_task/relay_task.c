@@ -106,7 +106,7 @@ void Relay_Task( void * pvParameters )
     		LATCH_Set(1);
     	}
 
-    	vTaskDelay(pdMS_TO_TICKS(200));
+    	vTaskDelay(pdMS_TO_TICKS(70));
     }
 }
 

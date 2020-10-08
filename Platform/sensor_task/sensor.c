@@ -99,11 +99,11 @@ void Sensor_UpdateValue()
 
 uint8_t Sensor_CheckValue(uint16_t sen_addr, uint32_t value)
 {
-	if(sen_addr = 0xFFFE) {
+	if(sen_addr == 0xFFFE) {
 		return 0;
 	}
 
-	if(sen_addr = 0xFFFF) {
+	if(sen_addr == 0xFFFF) {
 		return 1;
 	}
 

@@ -69,7 +69,7 @@ void BitEngine_task( void * pvParameters )
 			}
 		}
 
-    	vTaskDelay(pdMS_TO_TICKS(200));
+    	vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 

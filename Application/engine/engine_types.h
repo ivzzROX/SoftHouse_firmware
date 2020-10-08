@@ -30,7 +30,7 @@ enum ROOT_TYPE
 	WEEK,
 	PMO, //power multiplied output
 	INO, //ext intput output
-	TLGRM
+	WEB
 };
 
 struct TM
