@@ -36,9 +36,9 @@ void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
 void clear_info(struct OUTPUTS* out, uint16_t out_n)
 {
 	out[out_n].branch_n = 0;
-	memset(out[out_n].par, 0, sizeof(struct OP));
-	memset(out[out_n].tim, 0, sizeof(struct TM));
-	memset(out[out_n].root_par, 0, sizeof(struct OP_ROOT));
+	memset(out[out_n].par, 0, sizeof(OP));
+	memset(out[out_n].tim, 0, sizeof(TM));
+	memset(out[out_n].root_par, 0, sizeof(OP_ROOT));
 }
 
 void BitEngine_task( void * pvParameters )
@@ -69,7 +69,7 @@ void BitEngine_task( void * pvParameters )
 			}
 		}
 
-    	vTaskDelay(pdMS_TO_TICKS(50));
+    	vTaskDelay(pdMS_TO_TICKS(40));
     }
 }
 

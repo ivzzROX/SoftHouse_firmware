@@ -174,6 +174,11 @@ uint8_t ESP_SendData(const char *url, uint16_t port, const char *data, uint32_t 
 				UART2_SendData("\r\n", 2);
 			}
 		}
+
+	} else {
+		requestFlush();
+		sprintf(request, "AT+CIPCLOSE\r\n");
+		UART2_SendData(request, strlen(request));
 	}
 
 	return 0;

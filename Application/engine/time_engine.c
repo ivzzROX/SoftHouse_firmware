@@ -4,7 +4,7 @@
 
 #include <time.h>
 
-uint8_t is_cur_time(struct TM* ft)
+uint8_t is_cur_time(TM* ft)
 {
 	struct tm time_info = { 0 };
 	RTC_GetTime(&time_info);

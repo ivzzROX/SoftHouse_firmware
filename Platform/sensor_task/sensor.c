@@ -92,7 +92,6 @@ void Sensor_UpdateValue()
 				sensor_list[i].error_counter++;
 			}
 		}
-
 		UART3_SendData_byte('/');
 	}
 }

@@ -8,4 +8,4 @@ esp8266.c:76:9:ESP_SetMode	16	static
 esp8266.c:96:9:ESP_SetCipmuxZero	16	static
 esp8266.c:110:9:ESP_SetParamsSoftAP	16	static
 esp8266.c:127:9:ESP_SetParamsStation	16	static
-esp8266.c:150:9:ESP_SendData	32	static
+esp8266.c:150:9:ESP_SendData	40	static

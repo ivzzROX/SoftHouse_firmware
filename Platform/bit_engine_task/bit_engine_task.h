@@ -12,13 +12,6 @@
 
 void BitEngine_TaskInit( void );
 
-struct OUTPUTS
-{
-	struct TM tim[8];
-	struct OP par[128];
-	struct OP_ROOT root_par[16];
-	uint16_t branch_n;
-}outputs[16];
 
 void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n);
 void clear_info(struct OUTPUTS* out, uint16_t out_n);

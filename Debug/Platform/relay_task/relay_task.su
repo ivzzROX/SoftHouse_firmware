@@ -7,5 +7,6 @@ relay_task.c:19:6:SPI2_Init	72	static
 relay_task.c:60:13:SPI2_SendByte	16	static
 relay_task.c:67:13:GPIO_Init	32	static
 relay_task.c:78:13:LATCH_Set	16	static
-relay_task.c:87:6:Relay_Task	24	static
-relay_task.c:113:6:Relay_TaskInit	24	static
+relay_task.c:87:13:Relay_SetValue	16	static
+relay_task.c:95:6:Relay_Task	32	static
+relay_task.c:139:6:Relay_TaskInit	24	static

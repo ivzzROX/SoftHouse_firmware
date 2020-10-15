@@ -12,10 +12,11 @@ static int jsoneq(const char* json, jsmntok_t* tok, const char* s) {
 	return -1;
 }
 
-int json_get_op(const char* input, struct OP* out, struct OP_ROOT* root, struct TM* time)
+int json_get_op(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_trigger)
 {
 	int counter = 0;
 	int tm_counter = 0;
+	int tt_counter = 0;
 	int root_counter = 0;
 	int i;
 	int r;
@@ -85,6 +86,26 @@ int json_get_op(const char* input, struct OP* out, struct OP_ROOT* root, struct 
 					root[j].type = WEEK;
 					root[j].operation = NULL;
 					root[j].operation_n = strtol(p_stt + 4, NULL, 16); //save value to op number
+					continue;
+				}
+
+				if (root[j].name[0] == 'f') //t trigger
+				{
+					root[j].type = T_TRIGGER;
+
+					for (uint16_t r = 0; r < root_counter; ++r)
+					{
+						if (memcmp(p_stt + 6, root[r].name, 3) == 0)
+						{
+							t_trigger[tt_counter].root_id = root[r].id;
+							break;
+						}
+					}
+
+					root[j].operation = t_trigger + tt_counter;
+					root[j].operation_n = 0;
+
+					tt_counter++;
 					continue;
 				}
 

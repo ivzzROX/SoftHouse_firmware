@@ -70,7 +70,7 @@ static void GPIO_Init()
 
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_1; //ST_CP latchPin
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
 	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 }
@@ -84,29 +84,55 @@ static void LATCH_Set(uint8_t val)
 	}
 }
 
+static void Relay_SetValue(uint16_t out_value)
+{
+	LATCH_Set(0);
+	SPI2_SendByte(~(uint8_t)(out_value >> 8));
+	SPI2_SendByte(~(uint8_t)(out_value & 0xFF));
+	LATCH_Set(1);
+}
+
 void Relay_Task( void * pvParameters )
 {
     configASSERT( ( ( uint32_t ) pvParameters ) == 1 );
 
-    uint16_t out_value = 0;
+    uint16_t value = 0;
     uint16_t prev_value = 0;
 
     SPI2_Init();
     GPIO_Init();
 
+    Relay_SetValue(0x0000);
+
     while(1)
     {
-    	out_value = Get_OutValue();
-    	if(prev_value != out_value)
+    	value = Get_OutValue();
+
+    	if(prev_value != value)
     	{
-    		prev_value = out_value;
-    		LATCH_Set(0);
-    		SPI2_SendByte((uint8_t)(out_value >> 8));
-    		SPI2_SendByte((uint8_t)(out_value & 0xFF));
-    		LATCH_Set(1);
+    		prev_value = value;
+
+    		uint16_t out_value = 0;
+
+        	for(uint8_t i = 0; i < 8; ++i)  {
+
+        		if( value & (1 << (i * 2) ) )
+        		{
+        			out_value |= ( 1 << i );
+        		}
+
+        		if( value & (1 << (i * 2 + 1) ) )
+        		{
+        			out_value |= ( 1 << (i + 8) );
+        		}
+        	}
+
+    		taskENTER_CRITICAL();
+    		Relay_SetValue(out_value);
+    		taskEXIT_CRITICAL();
     	}
 
-    	vTaskDelay(pdMS_TO_TICKS(70));
+    	vTaskDelay(pdMS_TO_TICKS(40));
     }
 }
 

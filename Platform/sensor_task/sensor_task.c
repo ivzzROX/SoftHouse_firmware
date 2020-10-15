@@ -30,7 +30,7 @@ void Sensor_task( void * pvParameters )
 
 		Sensor_UpdateValue();
 
-		vTaskDelay(pdMS_TO_TICKS(70));
+		vTaskDelay(pdMS_TO_TICKS(40));
 	}
 }
 

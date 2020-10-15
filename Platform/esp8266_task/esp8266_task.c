@@ -22,12 +22,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-const char url_t[] = "192.168.1.210";
+const char URL[] = "192.168.1.210";
+const uint16_t PORT = 5002;
 
 void ESP_GetJson()
 {
 	const char get_t[] = "GET http://192.168.1.210/test HTTP/1.1\r\nHost: 192.168.1.210\r\n\r\n";
-	ESP_SendData(url_t, 5002, get_t, sizeof(get_t) - 1, 1);
+	ESP_SendData(URL, PORT, get_t, sizeof(get_t) - 1, 1);
 	vTaskDelay(pdMS_TO_TICKS(1000));
 
 	char* ptr = NULL;
@@ -41,7 +42,7 @@ void ESP_GetJson()
 void ESP_UpdateTime()
 {
 	const char get_t[] = "GET http://192.168.1.210/timestamp HTTP/1.1\r\nHost: 192.168.1.210\r\n\r\n";
-	ESP_SendData(url_t, 5002, get_t, sizeof(get_t) - 1, 1);
+	ESP_SendData(URL, PORT, get_t, sizeof(get_t) - 1, 1);
 	vTaskDelay(pdMS_TO_TICKS(1000));
 
 	char* ptr_tm = NULL;
@@ -78,7 +79,7 @@ void ESP_SendSensorList()
 	buff[strlen(buff) - 1] = 0;
 	strcpy(buff, postfix);
 
-	ESP_SendData(url_t, 5002, buff, sizeof(buff) - 1, 1);
+	ESP_SendData(URL, PORT, buff, sizeof(buff) - 1, 1);
 }
 
 void ESP_Task( void * pvParameters )

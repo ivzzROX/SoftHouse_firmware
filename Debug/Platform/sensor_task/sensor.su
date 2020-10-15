@@ -3,4 +3,4 @@ sensor.c:27:6:Sensor_Init	16	static
 sensor.c:35:9:Sensor_GPIOUpdateList	8	static
 sensor.c:40:6:Sensor_UpdateList	16	static
 sensor.c:68:6:Sensor_UpdateValue	16	static
-sensor.c:100:9:Sensor_CheckValue	24	static
+sensor.c:99:9:Sensor_CheckValue	24	static

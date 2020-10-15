@@ -1,0 +1,94 @@
+// JUST CONSOLE OUTPUT FUNCTION
+
+static const char* lg_type_to_str(enum LG log)
+{
+	switch (log)
+	{
+	case FIRST:		return " ";
+	case OR:		return "OR ";
+	case AND:		return "AND ";
+	case NOR:		return "NOR ";
+	case NAND:		return "NAND ";
+	default:		return " ";
+	}
+}
+
+static char days[] = "S  M  T  W  T  F  S  ";
+static char* week_val_to_str(uint16_t val)
+{
+	for (int i = 0, n = 1; i < 7; ++i, n += 3)
+	{
+		if (val & (1 << i))
+		{
+			days[n] = 'v';
+		}
+		else days[n] = 'x';
+	}
+	return days;
+}
+
+static char* root_name_by_id(OP_ROOT* root, uint16_t root_n, uint8_t id)
+{
+	for (int i = 0; i < root_n; ++i)
+	{
+		if (root[i].id == id)
+		{
+			return root[i].name;
+		}
+	}
+	return 0;
+}
+
+uint8_t print_roots(OP_ROOT* root, uint16_t root_n)
+{
+	if (root[0].type == PMO || root[0].type == INO)
+	{
+		return 0;
+	}
+
+	for (int i = 0; i < root_n; ++i)
+	{
+		printf("%s:\t", root[i].name);
+		
+		switch (root[i].type)
+		{
+		case BRCH:
+			;
+			OP* op_arr = (OP*)root[i].operation;
+			for (int n = 0; n < root[i].operation_n; ++n)
+			{
+				if (op_arr[n].type == DATA)
+				{
+					printf("%s%04x ", lg_type_to_str(op_arr[n].log), op_arr[n].addr);
+				}
+				if (op_arr[n].type == STATE)
+				{
+					printf("%s%s ", lg_type_to_str(op_arr[n].log), root_name_by_id(root, root_n, op_arr[n].root_id));
+				}
+			}
+			break;
+		case TIME:
+			;
+			TM* time = (TM*)root[i].operation;
+			printf("From:%02d:%02d to:%02d:%02d", time->from.tm_hour,
+				time->from.tm_min, time->to.tm_hour, time->to.tm_min);
+			break;
+		case WEEK:
+			printf("Days: %s", week_val_to_str(root[i].operation_n));
+			break;
+		case PMO:
+			printf("Power multiplied output %d", root[i].operation_n);
+			break;
+		case INO:
+			printf("Ext intput output %d", root[i].operation_n);
+			break;
+		case WEB:
+			printf("Telegram id %d", root[i].operation_n);
+			break;
+		}
+
+		printf("\tres: %d\r\n", root[i].result);
+	}
+
+	return 1;
+}
