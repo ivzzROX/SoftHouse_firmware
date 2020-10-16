@@ -29,7 +29,7 @@ uint16_t Get_OutValue()
 void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
 {
 	out[out_n].branch_n = -1;
-	out[out_n].branch_n = json_get_op(buff, out[out_n].par, out[out_n].root_par, out[out_n].tim);
+	out[out_n].branch_n = json_get_op(buff, out + out_n);
 	map_op_on_root(out[out_n].par, out[out_n].root_par, out[out_n].branch_n);
 }
 
@@ -38,6 +38,8 @@ void clear_info(struct OUTPUTS* out, uint16_t out_n)
 	out[out_n].branch_n = 0;
 	memset(out[out_n].par, 0, sizeof(OP));
 	memset(out[out_n].tim, 0, sizeof(TM));
+	//memset(out[out_n].t_tr,  0, sizeof(T_TR));
+	//memset(out[out_n].rs_tr, 0, sizeof(RS_TR));
 	memset(out[out_n].root_par, 0, sizeof(OP_ROOT));
 }
 
@@ -47,14 +49,16 @@ void BitEngine_task( void * pvParameters )
 
     INO_Init();
 
-    for (uint8_t out_n = 0; out_n < 16; ++out_n)
+    for (uint8_t out_n = 0; out_n < OUTPUTS_N; ++out_n)
     {
+    	memset(outputs[out_n].t_tr,  0, sizeof(T_TR));
+    	memset(outputs[out_n].rs_tr, 0, sizeof(RS_TR));
     	clear_info(outputs, out_n);
     }
 
     while(1)
     {
-    	for (uint8_t i = 0; i < 16; ++i)
+    	for (uint8_t i = 0; i < OUTPUTS_N; ++i)
     	{
 			if (outputs[i].branch_n == 0 || outputs[i].branch_n > 1024)
 			{

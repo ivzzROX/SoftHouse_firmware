@@ -7,19 +7,9 @@
 
 #include <stdio.h>
 
-void t_trigger_set(uint8_t value)
-{
-
-}
-
-uint8_t t_trigger_get()
-{
-	return 0;
-}
-
 uint8_t bit_proces(OP* op_arr, uint16_t op_n)
 {
-	if ( op_arr[0].log == FIRST) {
+	if ( op_arr[0].log != FIRST) {
 		return 0;
 	}
 
@@ -106,7 +96,54 @@ uint8_t map_op_on_root(OP* op, OP_ROOT* root, uint16_t root_n)
 	return 1;
 }
 
-uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t ino)
+
+uint8_t t_trigger_update(OP_ROOT* root, uint16_t root_n, T_TR* tt)
+{
+	for(uint16_t i = 0; i < root_n; ++i)
+	{
+		if(root[i].id == tt->root_id)
+		{
+			if(tt->prev_root_id_value == 0
+			&& root[i].result == 1)
+			{
+				tt->value ^= 1;
+			}
+			tt->prev_root_id_value = root[i].result;
+			return tt->value ^ 1;
+		}
+	}
+	return 0;
+}
+
+uint8_t rs_trigger_update(OP_ROOT* root, uint16_t root_n, RS_TR* rst)
+{
+	for(uint16_t i = 0; i < root_n; ++i)
+	{
+		if(root[i].id == rst->root_id_s)
+		{
+			if(rst->prev_root_id_s_value == 0
+			&& root[i].result == 1)
+			{
+				rst->value = 1;
+			}
+			rst->prev_root_id_s_value = root[i].result;
+		}
+
+		if(root[i].id == rst->root_id_r)
+		{
+			if(rst->prev_root_id_r_value == 0
+			&& root[i].result == 1)
+			{
+				rst->value = 0;
+			}
+			rst->prev_root_id_r_value = root[i].result;
+		}
+	}
+
+	return rst->value ^ 1;
+}
+
+uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t out)
 {
 	if (root == NULL)
 	{
@@ -146,24 +183,24 @@ uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t ino)
 		case PMO:
 		{
 			uint16_t link_out = root[i].operation_n - 800;
-			root[i].result = ino & (1 << link_out);
+			root[i].result = out & (1 << link_out);
 			break;
 		}
 
 		case T_TRIGGER:
 		{
-			root[i].result = (T_TR*)root[i].operation->value;
+			root[i].result = t_trigger_update(root, root_n, (T_TR*)root[i].operation);
 			break;
 		}
 
 		case RS_TRIGGER:
 		{
-			root[i].result = 0;
+			root[i].result = rs_trigger_update(root, root_n, (RS_TR*)root[i].operation);
 			break;
 		}
 
 		case BRCH:
-			for (uint16_t o = 1; o < root[i].operation_n; ++o)
+			for (uint16_t o = 0; o < root[i].operation_n; ++o)
 			{
 				OP* op_arr = (OP*)root[i].operation;
 				if (op_arr[o].type == STATE)
@@ -183,6 +220,7 @@ uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t ino)
 				}
 			}
 			root[i].result = bit_proces((OP*)root[i].operation, root[i].operation_n);
+
 			break;
 		}
 	}

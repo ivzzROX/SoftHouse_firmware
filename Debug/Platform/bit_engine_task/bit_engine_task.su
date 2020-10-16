@@ -1,5 +1,5 @@
 bit_engine_task.c:24:10:Get_OutValue	4	static
 bit_engine_task.c:29:6:update_info_from_json	32	static
 bit_engine_task.c:36:6:clear_info	16	static
-bit_engine_task.c:44:6:BitEngine_task	24	static
-bit_engine_task.c:77:6:BitEngine_TaskInit	24	static
+bit_engine_task.c:46:6:BitEngine_task	24	static
+bit_engine_task.c:81:6:BitEngine_TaskInit	24	static

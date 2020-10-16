@@ -12,11 +12,12 @@ static int jsoneq(const char* json, jsmntok_t* tok, const char* s) {
 	return -1;
 }
 
-int json_get_op(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_trigger)
+int json_get_op(const char* input, struct OUTPUTS* out)
 {
 	int counter = 0;
 	int tm_counter = 0;
 	int tt_counter = 0;
+	int rst_counter = 0;
 	int root_counter = 0;
 	int i;
 	int r;
@@ -53,84 +54,113 @@ int json_get_op(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_tri
 				char* p_stt = (char*)input + g->start + 1;
 				char* p_end = NULL;
 
-				memcpy(root[j].name, p_stt, 3);
-				root[j].name[3] = 0; // manually null terminated
-				root[j].id = j;
+				memcpy(out->root_par[j].name, p_stt, 3);
+				out->root_par[j].name[3] = 0; // manually null terminated
+				out->root_par[j].id = j;
 
-				if (root[j].name[0] == 'i') //ino
+				if (out->root_par[j].name[0] == 'i') //ino
 				{
-					root[j].type = INO;
-					root[j].operation = NULL;
-					root[j].operation_n = strtol(p_stt + 4, NULL, 10) + 200; //save inp to op number
+					out->root_par[j].type = INO;
+					out->root_par[j].operation = NULL;
+					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 200; //save inp to op number
 					continue;
 				}
 
-				if (root[j].name[0] == 'g') //telegram
+				if (out->root_par[j].name[0] == 'g') //telegram
 				{
-					root[j].type = WEB;
-					root[j].operation = NULL;
-					root[j].operation_n = strtol(p_stt + 4, NULL, 10) + 600;
+					out->root_par[j].type = WEB;
+					out->root_par[j].operation = NULL;
+					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 600;
 					continue;
 				}
 
-				if (root[j].name[0] == 'p') //pmo
+				if (out->root_par[j].name[0] == 'p') //pmo
 				{
-					root[j].type = PMO;
-					root[j].operation = NULL;
-					root[j].operation_n = strtol(p_stt + 4, NULL, 10) + 800;
+					out->root_par[j].type = PMO;
+					out->root_par[j].operation = NULL;
+					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 800;
 					continue;
 				}
 
-				if (root[j].name[0] == 'w') //week
+				if (out->root_par[j].name[0] == 'w') //week
 				{
-					root[j].type = WEEK;
-					root[j].operation = NULL;
-					root[j].operation_n = strtol(p_stt + 4, NULL, 16); //save value to op number
+					out->root_par[j].type = WEEK;
+					out->root_par[j].operation = NULL;
+					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 16); //save value to op number
 					continue;
 				}
 
-				if (root[j].name[0] == 'f') //t trigger
+				if (out->root_par[j].name[0] == 'f') //t trigger
 				{
-					root[j].type = T_TRIGGER;
+					out->root_par[j].type = T_TRIGGER;
 
-					for (uint16_t r = 0; r < root_counter; ++r)
+					for (uint16_t r = 0; r < j; ++r)
 					{
-						if (memcmp(p_stt + 6, root[r].name, 3) == 0)
+						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
 						{
-							t_trigger[tt_counter].root_id = root[r].id;
+							out->t_tr[tt_counter].root_id = out->root_par[r].id;
 							break;
 						}
 					}
 
-					root[j].operation = t_trigger + tt_counter;
-					root[j].operation_n = 0;
+					out->root_par[j].operation = out->t_tr + tt_counter;
+					out->root_par[j].operation_n = 1;
 
 					tt_counter++;
 					continue;
 				}
 
-				if (root[j].name[0] == 't') //time
+				if (out->root_par[j].name[0] == 'r') //rs trigger
 				{
-					root[j].type = TIME;
+					out->root_par[j].type = RS_TRIGGER;
 
-					time[tm_counter].from.tm_hour = strtol(p_stt + 4, &p_end, 10);
-					time[tm_counter].from.tm_min =  strtol(p_end + 1, &p_end, 10);
+					for (uint16_t r = 0; r < j; ++r)
+					{
+						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
+						{
+							out->rs_tr[rst_counter].root_id_s = out->root_par[r].id;
+							break;
+						}
+					}
 
-					time[tm_counter].to.tm_hour = strtol(p_end + 1, &p_end, 10);
-					time[tm_counter].to.tm_min =  strtol(p_end + 1, NULL, 10);
+					for (uint16_t r = 0; r < j; ++r)
+					{
+						if (memcmp(p_stt + 10, out->root_par[r].name, 3) == 0)
+						{
+							out->rs_tr[rst_counter].root_id_r = out->root_par[r].id;
+							break;
+						}
+					}
 
-					root[j].operation = time + tm_counter;
-					root[j].operation_n = 0;
+					out->root_par[j].operation = out->rs_tr + rst_counter;
+					out->root_par[j].operation_n = 1;
+
+					rst_counter++;
+					continue;
+				}
+
+				if (out->root_par[j].name[0] == 't') //time
+				{
+					out->root_par[j].type = TIME;
+
+					out->tim[tm_counter].from.tm_hour = strtol(p_stt + 4, &p_end, 10);
+					out->tim[tm_counter].from.tm_min =  strtol(p_end + 1, &p_end, 10);
+
+					out->tim[tm_counter].to.tm_hour = strtol(p_end + 1, &p_end, 10);
+					out->tim[tm_counter].to.tm_min =  strtol(p_end + 1, NULL, 10);
+
+					out->root_par[j].operation = out->tim + tm_counter;
+					out->root_par[j].operation_n = 1;
 
 					tm_counter++;
 					continue;
 				}
 
-				if (root[j].name[0] == 's' || root[j].name[0] == 'o') // state or out
+				if (out->root_par[j].name[0] == 's' || out->root_par[j].name[0] == 'o') // state or out
 				{
-					root[j].type = BRCH;
-					root[j].operation = NULL;
-					root[j].operation_n = strtol(p_stt + 4, &p_end, 10);
+					out->root_par[j].type = BRCH;
+					out->root_par[j].operation = NULL;
+					out->root_par[j].operation_n = strtol(p_stt + 4, &p_end, 10);
 					continue;
 				}
 			}
@@ -179,28 +209,28 @@ int json_get_op(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_tri
 
 				for (int r = 0; r < root_counter; ++r)
 				{
-					if (memcmp(p_stt, root[r].name, 3) == 0)
+					if (memcmp(p_stt, out->root_par[r].name, 3) == 0)
 					{
-						root_id = root[r].id;
+						root_id = out->root_par[r].id;
 						break;
 					}
 				}
 
 				if (root_id > 0)
 				{
-					out[counter].addr = 0;
-					out[counter].log = (enum LG)strtol(p_stt + 5, NULL, 10);
-					out[counter].root_id = root_id;
-					out[counter].type = STATE;
+					out->par[counter].addr = 0;
+					out->par[counter].log = (enum LG)strtol(p_stt + 5, NULL, 10);
+					out->par[counter].root_id = root_id;
+					out->par[counter].type = STATE;
 
 					counter++;
 					continue;
 				}
 
-				out[counter].addr = strtol(p_stt, &p_end, 16); //10
-				out[counter].log = (enum LG)strtol(p_end + 1, &p_end, 10);
-				out[counter].trigger_value = strtol(p_end + 1, &p_end, 10);
-				out[counter].type = DATA;
+				out->par[counter].addr = strtol(p_stt, &p_end, 16); //10
+				out->par[counter].log = (enum LG)strtol(p_end + 1, &p_end, 10);
+				out->par[counter].trigger_value = strtol(p_end + 1, &p_end, 10);
+				out->par[counter].type = DATA;
 
 				counter++;
 			}

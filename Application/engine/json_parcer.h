@@ -4,5 +4,6 @@
 
 #include "engine_types.h"
 
-int json_get_op(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_trigger);
+int json_get_op(const char* input, struct OUTPUTS* out);
+//(const char* input, OP* out, OP_ROOT* root, TM* time, T_TR* t_trigger);
 #endif

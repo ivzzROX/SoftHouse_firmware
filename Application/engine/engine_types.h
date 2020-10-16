@@ -59,7 +59,7 @@ struct xOpRoot
 	uint16_t operation_n;
 	char name[5];
 	uint8_t id;
-	uint16_t result;
+	uint8_t result;
 };
 
 struct xRsTr
@@ -67,16 +67,19 @@ struct xRsTr
 	uint8_t root_id_s;
 	uint8_t root_id_r;
 	uint8_t value;
+	uint8_t prev_root_id_s_value;
+	uint8_t prev_root_id_r_value;
 };
 
-struct xRsTr
+struct xTTr
 {
 	uint8_t root_id;
 	uint8_t value;
+	uint8_t prev_root_id_value;
 };
 
 typedef struct xRsTr RS_TR;
-typedef struct xRsTr T_TR;
+typedef struct xTTr T_TR;
 
 typedef struct xTm TM;
 typedef struct xOp OP;

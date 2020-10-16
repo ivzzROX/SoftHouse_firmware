@@ -38,7 +38,7 @@ void Sensor_TaskInit( void )
 {
 	TaskHandle_t xHandle = NULL;
 
-	BaseType_t xReturned =
+	//BaseType_t xReturned =
 	xTaskCreate(
 					Sensor_task,      				 /* Function that implements the task. */
                     "Sensor_task",    		     	 /* Text name for the task. */
