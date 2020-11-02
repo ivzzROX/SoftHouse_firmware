@@ -4,6 +4,12 @@
 
 #include <time.h>
 
+uint8_t get_cur_time(struct tm* time)
+{
+	RTC_GetTime(time);
+	return 1;
+}
+
 uint8_t is_cur_time(TM* ft)
 {
 	struct tm time_info = { 0 };

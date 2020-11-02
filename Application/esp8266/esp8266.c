@@ -73,6 +73,11 @@ char* ESP_GetRxData()
 	return RingBuffGetArray(&UART2_rx_data);
 }
 
+uint8_t ESP_SoftReset()
+{
+	UART2_SendData("AT+RST\r\n", 8);
+}
+
 uint8_t ESP_SetMode(uint8_t mode)
 {
 	requestFlush();

@@ -33,4 +33,6 @@ uint8_t ESP_SendData(const char *url, uint16_t port, const char *data, uint32_t 
 
 char* ESP_GetRxData();
 
+uint8_t ESP_SoftReset();
+
 #endif /* ESP8266_ESP8266_H_ */

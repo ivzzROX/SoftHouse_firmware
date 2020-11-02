@@ -1,2 +1,3 @@
-time_engine.c:7:9:is_cur_time	56	static
-time_engine.c:34:9:is_cur_day_of_week	56	static
+time_engine.c:7:9:get_cur_time	16	static
+time_engine.c:13:9:is_cur_time	56	static
+time_engine.c:40:9:is_cur_day_of_week	56	static

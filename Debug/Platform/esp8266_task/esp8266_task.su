@@ -1,5 +1,5 @@
 esp8266_task.c:28:6:ESP_GetJson	96	static
 esp8266_task.c:42:6:ESP_UpdateTime	136	static
-esp8266_task.c:62:6:ESP_SendSensorList	696	static
-esp8266_task.c:85:6:ESP_Task	24	static
-esp8266_task.c:104:6:ESP_TaskInit	24	static
+esp8266_task.c:62:6:ESP_SendSensorList	768	static
+esp8266_task.c:92:6:ESP_Task	24	static
+esp8266_task.c:112:6:ESP_TaskInit	24	static

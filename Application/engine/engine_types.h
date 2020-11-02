@@ -34,7 +34,9 @@ enum ROOT_TYPE
 	INO, //ext intput output
 	WEB,
 	T_TRIGGER,
-	RS_TRIGGER
+	RS_TRIGGER,
+	COUNTER,
+	DELAY
 };
 
 struct xTm
@@ -78,21 +80,39 @@ struct xTTr
 	uint8_t prev_root_id_value;
 };
 
+struct xCounter
+{
+	uint8_t root_id;
+	uint16_t value;
+	uint16_t trigger_value;
+	uint8_t prev_root_id_value;
+};
+
+struct xDelay
+{
+	uint8_t root_id;
+	uint16_t value;
+	time_t finish_time;
+	uint8_t prev_root_id_value;
+};
+
 typedef struct xRsTr RS_TR;
 typedef struct xTTr T_TR;
+
+typedef struct xCounter CNTR;
+typedef struct xDelay DL;
 
 typedef struct xTm TM;
 typedef struct xOp OP;
 typedef struct xOpRoot OP_ROOT;
 
-
 struct OUTPUTS
 {
 	T_TR t_tr[8];
 	RS_TR rs_tr[8];
-
+	CNTR cntr[8];
+	DL del[8];
 	TM tim[8];
-
 	OP par[128];
 	OP_ROOT root_par[16];
 

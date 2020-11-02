@@ -97,7 +97,7 @@ uint8_t map_op_on_root(OP* op, OP_ROOT* root, uint16_t root_n)
 }
 
 
-uint8_t t_trigger_update(OP_ROOT* root, uint16_t root_n, T_TR* tt)
+static uint8_t t_trigger_update(OP_ROOT* root, uint16_t root_n, T_TR* tt)
 {
 	for(uint16_t i = 0; i < root_n; ++i)
 	{
@@ -115,7 +115,7 @@ uint8_t t_trigger_update(OP_ROOT* root, uint16_t root_n, T_TR* tt)
 	return 0;
 }
 
-uint8_t rs_trigger_update(OP_ROOT* root, uint16_t root_n, RS_TR* rst)
+static uint8_t rs_trigger_update(OP_ROOT* root, uint16_t root_n, RS_TR* rst)
 {
 	for(uint16_t i = 0; i < root_n; ++i)
 	{
@@ -141,6 +141,68 @@ uint8_t rs_trigger_update(OP_ROOT* root, uint16_t root_n, RS_TR* rst)
 	}
 
 	return rst->value ^ 1;
+}
+
+static uint8_t counter_update(OP_ROOT* root, uint16_t root_n, CNTR* counter)
+{
+	uint8_t temp = 0;
+	for(uint16_t i = 0; i < root_n; ++i)
+	{
+		if(root[i].id == counter->root_id)
+		{
+			if(counter->prev_root_id_value == 0
+			&& root[i].result == 1)
+			{
+				counter->value++;
+
+				if(counter->value == counter->trigger_value)
+				{
+					counter->value = 0;
+					temp = 1;
+				}
+
+				if(counter->value > counter->trigger_value)
+				{
+					counter->value = 0;
+					temp = 0;
+				}
+			}
+			counter->prev_root_id_value = root[i].result;
+			return temp ^ 1;
+		}
+	}
+	return 0;
+}
+
+static uint8_t delay_update(OP_ROOT* root, uint16_t root_n, DL* del)
+{
+	uint8_t temp = 0;
+	time_t utime = 0;
+	struct tm time;
+
+	for(uint16_t i = 0; i < root_n; ++i)
+	{
+		if(root[i].id == del->root_id)
+		{
+			get_cur_time(&time);
+			utime = mktime(&time);
+
+			if(del->prev_root_id_value == 0
+			&& root[i].result == 1)
+			{
+				del->finish_time = utime + del->value;
+			}
+
+			if(utime >= del->finish_time)
+			{
+				temp = 1;
+			}
+
+			del->prev_root_id_value = root[i].result;
+			return temp ^ 1;
+		}
+	}
+	return 0;
 }
 
 uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t out)
@@ -184,6 +246,18 @@ uint8_t start_bit_engine(OP_ROOT* root, uint16_t root_n, uint16_t out)
 		{
 			uint16_t link_out = root[i].operation_n - 800;
 			root[i].result = out & (1 << link_out);
+			break;
+		}
+
+		case COUNTER:
+		{
+			root[i].result = counter_update(root, root_n, (CNTR*)root[i].operation);
+			break;
+		}
+
+		case DELAY:
+		{
+			root[i].result = delay_update(root, root_n, (DL*)root[i].operation);
 			break;
 		}
 

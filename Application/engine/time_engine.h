@@ -8,4 +8,7 @@
 uint8_t is_cur_time(TM* ft);
 
 uint8_t is_cur_day_of_week(uint16_t data);
+
+uint8_t get_cur_time(struct tm* time);
+
 #endif

@@ -18,6 +18,8 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 	int tm_counter = 0;
 	int tt_counter = 0;
 	int rst_counter = 0;
+	int cntr_counter = 0;
+	int dl_counter = 0;
 	int root_counter = 0;
 	int i;
 	int r;
@@ -55,7 +57,7 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 				char* p_end = NULL;
 
 				memcpy(out->root_par[j].name, p_stt, 3);
-				out->root_par[j].name[3] = 0; // manually null terminated
+				out->root_par[j].name[3] = 0; //manually null terminated
 				out->root_par[j].id = j;
 
 				if (out->root_par[j].name[0] == 'i') //ino
@@ -87,6 +89,48 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 					out->root_par[j].type = WEEK;
 					out->root_par[j].operation = NULL;
 					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 16); //save value to op number
+					continue;
+				}
+
+				if (out->root_par[j].name[0] == 'c') //counter
+				{
+					out->root_par[j].type = COUNTER;
+
+					for (uint16_t r = 0; r < j; ++r)
+					{
+						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
+						{
+							out->cntr[cntr_counter].root_id = out->root_par[r].id;
+							break;
+						}
+					}
+					out->cntr[cntr_counter].trigger_value = strtol(p_stt + 10, NULL, 10);
+
+					out->root_par[j].operation = out->cntr + cntr_counter;
+					out->root_par[j].operation_n = 1;
+
+					cntr_counter++;
+					continue;
+				}
+
+				if (out->root_par[j].name[0] == 'd') //delay
+				{
+					out->root_par[j].type = DELAY;
+
+					for (uint16_t r = 0; r < j; ++r)
+					{
+						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
+						{
+							out->del[dl_counter].root_id = out->root_par[r].id;
+							break;
+						}
+					}
+					out->del[dl_counter].value = strtol(p_stt + 10, NULL, 10);
+
+					out->root_par[j].operation = out->del + dl_counter;
+					out->root_par[j].operation_n = 1;
+
+					dl_counter++;
 					continue;
 				}
 
@@ -156,7 +200,7 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 					continue;
 				}
 
-				if (out->root_par[j].name[0] == 's' || out->root_par[j].name[0] == 'o') // state or out
+				if (out->root_par[j].name[0] == 's' || out->root_par[j].name[0] == 'o') //state or out
 				{
 					out->root_par[j].type = BRCH;
 					out->root_par[j].operation = NULL;
@@ -167,32 +211,6 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 			root_counter = j;
 			i += t[i + 1].size + 1;
 		}
-
-//		else if (jsoneq(input, &t[i], "pmo") == 0)
-//		{
-//			root[0].type = PMO;
-//			root->operation_n = strtol(input + t[i + 1].start, NULL, 10) + 2000; //save value to op number
-//			memcpy(root[0].name, "pmo\0", 4);
-//			root[0].operation = NULL;
-//			root[0].id = 0;
-//			root[0].result = 0;
-//
-//			return 1;
-//		}
-
-//not implemented
-//		else if (jsoneq(input, &t[i], "ino") == 0)
-//		{
-//			root[0].type = INO;
-//			root->operation_n = strtol(input + t[i + 1].start, NULL, 10) + 200; //save value to op number
-//			memcpy(root[0].name, "ino\0", 4);
-//			root[0].operation = NULL;
-//			root[0].id = 0;
-//			root[0].result = 0;
-//
-//			return 1;
-//		}
-
 		else
 		{
 			if (t[i + 1].type != JSMN_ARRAY)
