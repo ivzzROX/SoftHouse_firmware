@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 static int jsoneq(const char* json, jsmntok_t* tok, const char* s) {
 	if (tok->type == JSMN_STRING && (int)strlen(s) == tok->end - tok->start &&
@@ -40,177 +41,6 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 		{
 			i++;
 		}
-
-		else if (jsoneq(input, &t[i], "brch") == 0)
-		{
-			if (t[i + 1].type != JSMN_ARRAY)
-			{
-				continue;
-			}
-
-			int j = 0;
-			for (j; j < t[i + 1].size; ++j)
-			{
-				jsmntok_t* g = &t[i + j + 2];
-
-				char* p_stt = (char*)input + g->start + 1;
-				char* p_end = NULL;
-
-				memcpy(out->root_par[j].name, p_stt, 3);
-				out->root_par[j].name[3] = 0; //manually null terminated
-				out->root_par[j].id = j;
-
-				if (out->root_par[j].name[0] == 'i') //ino
-				{
-					out->root_par[j].type = INO;
-					out->root_par[j].operation = NULL;
-					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 200; //save inp to op number
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'g') //telegram
-				{
-					out->root_par[j].type = WEB;
-					out->root_par[j].operation = NULL;
-					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 600;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'p') //pmo
-				{
-					out->root_par[j].type = PMO;
-					out->root_par[j].operation = NULL;
-					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 10) + 800;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'w') //week
-				{
-					out->root_par[j].type = WEEK;
-					out->root_par[j].operation = NULL;
-					out->root_par[j].operation_n = strtol(p_stt + 4, NULL, 16); //save value to op number
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'c') //counter
-				{
-					out->root_par[j].type = COUNTER;
-
-					for (uint16_t r = 0; r < j; ++r)
-					{
-						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
-						{
-							out->cntr[cntr_counter].root_id = out->root_par[r].id;
-							break;
-						}
-					}
-					out->cntr[cntr_counter].trigger_value = strtol(p_stt + 10, NULL, 10);
-
-					out->root_par[j].operation = out->cntr + cntr_counter;
-					out->root_par[j].operation_n = 1;
-
-					cntr_counter++;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'd') //delay
-				{
-					out->root_par[j].type = DELAY;
-
-					for (uint16_t r = 0; r < j; ++r)
-					{
-						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
-						{
-							out->del[dl_counter].root_id = out->root_par[r].id;
-							break;
-						}
-					}
-					out->del[dl_counter].value = strtol(p_stt + 10, NULL, 10);
-
-					out->root_par[j].operation = out->del + dl_counter;
-					out->root_par[j].operation_n = 1;
-
-					dl_counter++;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'f') //t trigger
-				{
-					out->root_par[j].type = T_TRIGGER;
-
-					for (uint16_t r = 0; r < j; ++r)
-					{
-						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
-						{
-							out->t_tr[tt_counter].root_id = out->root_par[r].id;
-							break;
-						}
-					}
-
-					out->root_par[j].operation = out->t_tr + tt_counter;
-					out->root_par[j].operation_n = 1;
-
-					tt_counter++;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 'r') //rs trigger
-				{
-					out->root_par[j].type = RS_TRIGGER;
-
-					for (uint16_t r = 0; r < j; ++r)
-					{
-						if (memcmp(p_stt + 5, out->root_par[r].name, 3) == 0)
-						{
-							out->rs_tr[rst_counter].root_id_s = out->root_par[r].id;
-							break;
-						}
-					}
-
-					for (uint16_t r = 0; r < j; ++r)
-					{
-						if (memcmp(p_stt + 10, out->root_par[r].name, 3) == 0)
-						{
-							out->rs_tr[rst_counter].root_id_r = out->root_par[r].id;
-							break;
-						}
-					}
-
-					out->root_par[j].operation = out->rs_tr + rst_counter;
-					out->root_par[j].operation_n = 1;
-
-					rst_counter++;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 't') //time
-				{
-					out->root_par[j].type = TIME;
-
-					out->tim[tm_counter].from.tm_hour = strtol(p_stt + 4, &p_end, 10);
-					out->tim[tm_counter].from.tm_min =  strtol(p_end + 1, &p_end, 10);
-
-					out->tim[tm_counter].to.tm_hour = strtol(p_end + 1, &p_end, 10);
-					out->tim[tm_counter].to.tm_min =  strtol(p_end + 1, NULL, 10);
-
-					out->root_par[j].operation = out->tim + tm_counter;
-					out->root_par[j].operation_n = 1;
-
-					tm_counter++;
-					continue;
-				}
-
-				if (out->root_par[j].name[0] == 's' || out->root_par[j].name[0] == 'o') //state or out
-				{
-					out->root_par[j].type = BRCH;
-					out->root_par[j].operation = NULL;
-					out->root_par[j].operation_n = strtol(p_stt + 4, &p_end, 10);
-					continue;
-				}
-			}
-			root_counter = j;
-			i += t[i + 1].size + 1;
-		}
 		else
 		{
 			if (t[i + 1].type != JSMN_ARRAY)
@@ -218,40 +48,178 @@ int json_get_op(const char* input, struct OUTPUTS* out)
 				continue;
 			}
 
+			//add new branch
+			memcpy(out->root_par[root_counter].name, input + t[i].start, t[i].end - t[i].start);
+			out->root_par[root_counter].operation = NULL;
+			out->root_par[root_counter].operation_n = 0;
+			out->root_par[root_counter].id = root_counter;
+
+			//parse branch
 			for (int j = 0; j < t[i + 1].size; j++)
 			{
+				out->root_par[root_counter].operation_n++;
+
 				jsmntok_t* g = &t[i + j + 2];
 				char* p_stt = (char*)input + g->start + 1;
 				char* p_end = NULL;
-				int root_id = 0;
 
-				for (int r = 0; r < root_counter; ++r)
+
+				if (isalpha(p_stt[0]) && islower(p_stt[0]))
 				{
-					if (memcmp(p_stt, out->root_par[r].name, 3) == 0)
+					out->par[counter].root_id = 0;
+					switch(p_stt[0])
 					{
-						root_id = out->root_par[r].id;
+					case 's': //another branch
+						out->par[counter].type = STATE;
+						for (uint16_t r = 0; r < root_counter; ++r) {
+							if (memcmp(p_stt, out->root_par[r].name, 3) == 0) {
+								out->par[counter].root_id = out->root_par[r].id;
+								break;
+							}
+						}
+						out->par[counter].log = (enum LG)strtol(p_stt + 5, NULL, 16);
+						break;
+
+					case 'g': //telegram
+						out->par[counter].type = WEB;
+						out->par[counter].log = (enum LG)strtol(p_end + 3, &p_end, 16);
+						out->par[counter].trigger_value = strtol(p_end + 1, NULL, 10);
+						break;
+
+					case 'p': //pmo
+						out->par[counter].type = PMO;
+						out->par[counter].log = (enum LG)strtol(p_end + 3, &p_end, 16);
+						out->par[counter].trigger_value = strtol(p_end + 1, NULL, 10);
+						break;
+
+					case 'i': //ino
+						out->par[counter].type = INO;
+						out->par[counter].log = (enum LG)strtol(p_end + 3, &p_end, 16);
+						out->par[counter].trigger_value = strtol(p_end + 1, NULL, 10);
+						break;
+
+					case 'w': //week
+						out->par[counter].type = WEEK;
+						out->par[counter].log = (enum LG)strtol(p_end + 3, &p_end, 16);
+						out->par[counter].trigger_value = strtol(p_end + 1, NULL, 16);
+						break;
+
+					case 'c': //counter
+						out->par[counter].type = COUNTER;
+						out->par[counter].log = (enum LG)strtol(p_stt + 3, NULL, 16);
+
+						if (memcmp(p_stt + 6, "psv", 3) == 0) {
+							(out->cntr + cntr_counter)->root_id = -1;
+						} else {
+							for (uint16_t r = 0; r < root_counter; ++r) {
+								if (memcmp(p_stt + 6, out->root_par[r].name, 3) == 0) {
+									(out->cntr + cntr_counter)->root_id = out->root_par[r].id;
+									break;
+								}
+							}
+						}
+
+						out->par[counter].trigger_value = strtol(p_stt + 11, NULL, 10);
+						out->par[counter].data = out->cntr + cntr_counter;
+						cntr_counter++;
+						break;
+
+					case 'd': //delay
+						out->par[counter].type = DELAY;
+						out->par[counter].log = (enum LG)strtol(p_stt + 3, NULL, 16);
+
+						if (memcmp(p_stt + 6, "psv", 3) == 0) {
+							(out->del + dl_counter)->root_id = -1;
+						} else {
+							for (uint16_t r = 0; r < root_counter; ++r) {
+								if (memcmp(p_stt + 6, out->root_par[r].name, 3) == 0) {
+									(out->del + dl_counter)->root_id = out->root_par[r].id;
+									break;
+								}
+							}
+						}
+
+						out->del[dl_counter].value = strtol(p_stt + 11, NULL, 10);
+						out->par[counter].data	= out->del + dl_counter;
+						dl_counter++;
+						break;
+
+					case 'f': //t trigger
+						out->par[counter].type = T_TRIGGER;
+						out->par[counter].log = (enum LG)strtol(p_stt + 3, NULL, 16);
+
+						if (memcmp(p_stt + 6, "psv", 3) == 0) {
+							(out->t_tr + tt_counter)->root_id = -1;
+						} else {
+							for (uint16_t r = 0; r < root_counter; ++r) {
+								if (memcmp(p_stt + 6, out->root_par[r].name, 3) == 0) {
+									(out->t_tr + tt_counter)->root_id = out->root_par[r].id;
+									break;
+								}
+							}
+						}
+
+						out->par[counter].data	= out->t_tr + tt_counter;
+						tt_counter++;
+						break;
+
+					case 'r': //rs trigger
+						out->par[counter].type = RS_TRIGGER;
+						out->par[counter].log = (enum LG)strtol(p_stt + 3, NULL, 16);
+
+						if (memcmp(p_stt + 6, "psv", 3) == 0) {
+							out->rs_tr[rst_counter].root_id_s = -1;
+						} else {
+							for (uint16_t r = 0; r < root_counter; ++r) {
+								if (memcmp(p_stt + 6, out->root_par[r].name, 3) == 0) {
+									out->rs_tr[rst_counter].root_id_s = out->root_par[r].id;
+									break;
+								}
+							}
+						}
+
+						if (memcmp(p_stt + 6, "psv", 3) == 0) {
+							out->rs_tr[rst_counter].root_id_r = -1;
+						} else {
+							for (uint16_t r = 0; r < root_counter; ++r) {
+								if (memcmp(p_stt + 11, out->root_par[r].name, 3) == 0) {
+									out->rs_tr[rst_counter].root_id_r = out->root_par[r].id;
+									break;
+								}
+							}
+						}
+
+						out->par[counter].data	= out->rs_tr + rst_counter;
+						rst_counter++;
+						break;
+
+					case 't': //time
+						out->par[counter].type = TIME;
+						out->par[counter].log = (enum LG)strtol(p_stt + 3, NULL, 16);
+						out->tim[tm_counter].from.tm_hour = strtol(p_stt + 8, &p_end, 10);
+						out->tim[tm_counter].from.tm_min =  strtol(p_end + 1, &p_end, 10);
+						out->tim[tm_counter].to.tm_hour = strtol(p_end + 1, &p_end, 10);
+						out->tim[tm_counter].to.tm_min =  strtol(p_end + 1, NULL, 10);
+						out->par[counter].data	= out->tim + tm_counter;
+						tm_counter++;
+						break;
+
+					default:
 						break;
 					}
-				}
-
-				if (root_id > 0)
-				{
-					out->par[counter].addr = 0;
-					out->par[counter].log = (enum LG)strtol(p_stt + 5, NULL, 10);
-					out->par[counter].root_id = root_id;
-					out->par[counter].type = STATE;
-
 					counter++;
 					continue;
 				}
 
-				out->par[counter].addr = strtol(p_stt, &p_end, 16); //10
+				out->par[counter].addr = strtol(p_stt, &p_end, 16);
 				out->par[counter].log = (enum LG)strtol(p_end + 1, &p_end, 10);
 				out->par[counter].trigger_value = strtol(p_end + 1, &p_end, 10);
-				out->par[counter].type = DATA;
+				out->par[counter].type = SENSOR;
 
 				counter++;
 			}
+			out->root_par[root_counter].operation = out->par + (counter - out->root_par[root_counter].operation_n);
+			root_counter++;
 			i += t[i + 1].size + 1;
 		}
 	}

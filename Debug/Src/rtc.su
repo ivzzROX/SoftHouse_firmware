@@ -6,9 +6,13 @@ stm32f4xx_ll_rtc.h:1107:22:LL_RTC_EnableWriteProtection	16	static
 stm32f4xx_ll_rtc.h:1118:22:LL_RTC_DisableWriteProtection	16	static
 stm32f4xx_ll_rtc.h:1195:26:LL_RTC_TIME_GetHour	16	static
 stm32f4xx_ll_rtc.h:1230:26:LL_RTC_TIME_GetMinute	16	static
+stm32f4xx_ll_rtc.h:1265:26:LL_RTC_TIME_GetSecond	16	static
+stm32f4xx_ll_rtc.h:1458:26:LL_RTC_DATE_GetYear	16	static
 stm32f4xx_ll_rtc.h:1497:26:LL_RTC_DATE_GetWeekDay	16	static
+stm32f4xx_ll_rtc.h:1551:26:LL_RTC_DATE_GetMonth	16	static
+stm32f4xx_ll_rtc.h:1581:26:LL_RTC_DATE_GetDay	16	static
 stm32f4xx_ll_rtc.h:3051:22:LL_RTC_BAK_SetRegister	24	static
 stm32f4xx_ll_rtc.h:3089:26:LL_RTC_BAK_GetRegister	16	static
 rtc.c:3:6:RTC_Init	32	static
 rtc.c:33:6:RTC_GetTime	24	static
-rtc.c:54:6:RTC_SetTime	32	static
+rtc.c:60:6:RTC_SetTime	32	static

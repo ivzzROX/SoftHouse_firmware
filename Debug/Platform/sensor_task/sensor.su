@@ -1,6 +1,6 @@
-sensor.c:21:6:Sensor_ClearList	8	static
-sensor.c:27:6:Sensor_Init	16	static
-sensor.c:35:9:Sensor_GPIOUpdateList	8	static
-sensor.c:40:6:Sensor_UpdateList	16	static
-sensor.c:68:6:Sensor_UpdateValue	16	static
-sensor.c:99:9:Sensor_CheckValue	24	static
+sensor.c:22:6:Sensor_ClearList	8	static
+sensor.c:28:6:Sensor_Init	16	static
+sensor.c:37:9:Sensor_GPIOUpdateList	8	static
+sensor.c:42:6:Sensor_UpdateList	16	static
+sensor.c:71:6:Sensor_UpdateValue	16	static
+sensor.c:103:9:Sensor_CheckValue	24	static

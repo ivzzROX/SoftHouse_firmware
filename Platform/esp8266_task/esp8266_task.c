@@ -11,6 +11,7 @@
 #include "bit_engine_task.h"
 #include "rtc.h"
 #include "sensor.h"
+#include "led_task.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -89,46 +90,45 @@ void ESP_SendSensorList()
 	ESP_SendData(URL, PORT, buff, sizeof(buff) - 1, 1);
 }
 
-typedef enum CONNECNION_STATE {
+typedef enum CONNECTION_STATE {
 	RST = 1,
 	SET_MODE,
 	CONNECT_WIFI,
 	SEND_REQ
-}connection_state;
+}CN_ST;
 
 void ESP_Task( void * pvParameters )
 {
     configASSERT( ( ( uint32_t ) pvParameters ) == 1 );
 
     ESP_Init(vTaskDelay);
-    connection_state = 1;
+    FST_VALUE[0] = 0;
+    CN_ST connection_state = RST;
 
     while(1)
     {
     	switch(connection_state)
     	{
     	case RST:
+    		FST_VALUE[0] = 0;
     		ESP_SoftReset();
     		connection_state = SET_MODE;
     		break;
 
     	case SET_MODE:
-    		if(ESP_SetMode(ESP_MODE_BOTH) == 1)
-    		{
-    			connection_state = CONNECT_WIFI;
-    		} else {
-    			connection_state = RST;
-    		}
+    		ESP_SetMode(ESP_MODE_BOTH);
+    		connection_state = CONNECT_WIFI;
     		break;
 
     	case CONNECT_WIFI:
-    		if( ESP_SetParamsSoftAP("DontTouchAnything", "save_809") == 1) {
-    			ESP_UpdateTime();
-    			connection_state = SEND_REQ;
-    		}
+    		ESP_SetParamsSoftAP("DontTouchAnything", "save_809");
+    		ESP_UpdateTime();
+    		connection_state = SEND_REQ;
+    		FST_VALUE[0] = 1;
     		break;
 
     	case SEND_REQ:
+
     		ESP_GetJson();
     		break;
 

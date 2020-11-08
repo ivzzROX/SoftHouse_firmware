@@ -21,22 +21,17 @@ enum LG
 
 enum OP_TYPE
 {
-	DATA = 2,
-	STATE
-};
-
-enum ROOT_TYPE
-{
-	BRCH = 2,
+	SENSOR = 1,
 	TIME,
 	WEEK,
-	PMO, //power multiplied output
-	INO, //ext intput output
+	PMO,
+	INO,
 	WEB,
 	T_TRIGGER,
 	RS_TRIGGER,
 	COUNTER,
-	DELAY
+	DELAY,
+	STATE
 };
 
 struct xTm
@@ -47,16 +42,16 @@ struct xTm
 
 struct xOp
 {
-	uint16_t addr;
+	uint8_t root_id;
+	uint32_t addr;
+	void* data;
 	uint32_t trigger_value;
 	enum LG log;
 	enum OP_TYPE type;
-	uint8_t root_id;
 };
 
 struct xOpRoot
 {
-	enum ROOT_TYPE type;
 	void* operation;
 	uint16_t operation_n;
 	char name[5];
@@ -66,34 +61,33 @@ struct xOpRoot
 
 struct xRsTr
 {
-	uint8_t root_id_s;
-	uint8_t root_id_r;
+	int8_t root_id_s;
+	int8_t root_id_r;
 	uint8_t value;
-	uint8_t prev_root_id_s_value;
-	uint8_t prev_root_id_r_value;
+	uint8_t prev_root_s_value;
+	uint8_t prev_root_r_value;
 };
 
 struct xTTr
 {
-	uint8_t root_id;
+	int8_t root_id;
 	uint8_t value;
-	uint8_t prev_root_id_value;
+	uint8_t prev_root_value;
 };
 
 struct xCounter
 {
-	uint8_t root_id;
+	int8_t root_id;
 	uint16_t value;
-	uint16_t trigger_value;
-	uint8_t prev_root_id_value;
+	uint8_t prev_root_value;
 };
 
 struct xDelay
 {
-	uint8_t root_id;
+	int8_t root_id;
 	uint16_t value;
 	time_t finish_time;
-	uint8_t prev_root_id_value;
+	uint8_t prev_root_value;
 };
 
 typedef struct xRsTr RS_TR;

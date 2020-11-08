@@ -34,10 +34,16 @@ void RTC_GetTime(struct tm* time)
 {
 	time->tm_hour = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetHour(RTC));
 	time->tm_min = 	__LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetMinute(RTC));
+	time->tm_sec = 	__LL_RTC_CONVERT_BCD2BIN(LL_RTC_TIME_GetSecond(RTC));
+
+	time->tm_mday = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetDay(RTC));
+	time->tm_mon = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetMonth(RTC)) - 1;
+	time->tm_year = __LL_RTC_CONVERT_BCD2BIN(LL_RTC_DATE_GetYear(RTC));
 
 	// RTC HAS DIF WEEK DAY MASKS
 	//tm  0 - sunday 6 - saturday
 	//rtc 1 - monday 7 - sunday
+
 	switch(LL_RTC_DATE_GetWeekDay(RTC))
 	{
 	case LL_RTC_WEEKDAY_MONDAY: 	time->tm_wday = 1; break;

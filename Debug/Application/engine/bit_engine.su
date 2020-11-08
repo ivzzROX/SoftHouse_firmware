@@ -1,7 +1,7 @@
-bit_engine.c:10:9:bit_proces	24	static
-bit_engine.c:78:9:map_op_on_root	32	static
-bit_engine.c:100:16:t_trigger_update	32	static
-bit_engine.c:118:16:rs_trigger_update	32	static
-bit_engine.c:146:16:counter_update	32	static
-bit_engine.c:177:16:delay_update	72	static
-bit_engine.c:208:9:start_bit_engine	48	static
+bit_engine.c:10:16:t_trigger_update	32	static
+bit_engine.c:39:16:rs_trigger_update	32	static
+bit_engine.c:69:16:counter_update	32	static
+bit_engine.c:125:16:delay_update	72	static
+bit_engine.c:178:16:update_type_state	24	static
+bit_engine.c:198:16:bit_proces	48	static
+bit_engine.c:315:9:start_bit_engine	32	static

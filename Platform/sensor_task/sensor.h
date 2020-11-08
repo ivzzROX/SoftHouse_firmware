@@ -21,7 +21,7 @@ enum SENSOR_TYPE
 	TEMPERATURE
 };
 
-struct SENSOR
+struct xSENSOR
 {
 	enum SENSOR_TYPE type;
 	uint16_t addr;

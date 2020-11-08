@@ -10,7 +10,6 @@
 #include "bit_engine.h"
 #include "time_engine.h"
 #include "json_parcer.h"
-
 #include "ino.h"
 
 #include <string.h>
@@ -30,16 +29,12 @@ void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
 {
 	out[out_n].branch_n = -1;
 	out[out_n].branch_n = json_get_op(buff, out + out_n);
-	map_op_on_root(out[out_n].par, out[out_n].root_par, out[out_n].branch_n);
 }
 
 void clear_info(struct OUTPUTS* out, uint16_t out_n)
 {
 	out[out_n].branch_n = 0;
 	memset(out[out_n].par, 0, sizeof(OP));
-	memset(out[out_n].tim, 0, sizeof(TM));
-	//memset(out[out_n].t_tr,  0, sizeof(T_TR));
-	//memset(out[out_n].rs_tr, 0, sizeof(RS_TR));
 	memset(out[out_n].root_par, 0, sizeof(OP_ROOT));
 }
 
@@ -66,7 +61,8 @@ void BitEngine_task( void * pvParameters )
 			}
 			start_bit_engine(outputs[i].root_par, outputs[i].branch_n, out_value);
 
-			if(outputs[i].root_par[0].result) {
+			uint16_t branch = outputs[i].branch_n;
+			if(outputs[i].root_par[branch - 1].result) {
 				out_value |= 1 << i;
 			} else {
 				out_value &= 0 << i;

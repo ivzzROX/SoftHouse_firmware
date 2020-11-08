@@ -22,9 +22,7 @@ void ESP_Init(f_ptr delay_function)
 {
 	RingBuffInit(&UART2_rx_data);
 	UART2_Init(&UART2_rx_data);
-
 	UART2_SendData("\r\n", 2);
-
 	delay = delay_function;
 }
 
@@ -76,6 +74,7 @@ char* ESP_GetRxData()
 uint8_t ESP_SoftReset()
 {
 	UART2_SendData("AT+RST\r\n", 8);
+	return 1;
 }
 
 uint8_t ESP_SetMode(uint8_t mode)
@@ -186,5 +185,5 @@ uint8_t ESP_SendData(const char *url, uint16_t port, const char *data, uint32_t 
 		UART2_SendData(request, strlen(request));
 	}
 
-	return 0;
+	return 1;
 }
