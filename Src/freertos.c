@@ -4,6 +4,8 @@
 #include "main.h"
 #include "cmsis_os.h"
 
+#include "init_task.h"
+#include "w25_task.h"
 #include "led_task.h"
 #include "relay_task.h"
 #include "sensor_task.h"
@@ -22,22 +24,22 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 void MX_FREERTOS_Init(void)
 {
-	Led_TaskInit();
+	Init_TaskInit();
+
+	//Led_TaskInit();
 	Relay_TaskInit();
 
 	ESP_TaskInit();
-
 	BitEngine_TaskInit();
+	W25_TaskInit();
 	Sensor_TaskInit();
 
 	defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 }
 
-void StartDefaultTask(void *argument)
-{
-  for(;;)
-  {
-    osDelay(1);
-  }
+void StartDefaultTask(void *argument) {
+	for(;;) {
+		osDelay(1);
+	}
 }
 

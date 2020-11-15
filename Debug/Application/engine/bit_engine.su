@@ -1,7 +1,7 @@
-bit_engine.c:10:16:t_trigger_update	32	static
-bit_engine.c:39:16:rs_trigger_update	32	static
-bit_engine.c:69:16:counter_update	32	static
-bit_engine.c:125:16:delay_update	72	static
-bit_engine.c:178:16:update_type_state	24	static
-bit_engine.c:198:16:bit_proces	48	static
-bit_engine.c:315:9:start_bit_engine	32	static
+bit_engine.c:12:16:t_trigger_update	32	static
+bit_engine.c:41:16:rs_trigger_update	32	static
+bit_engine.c:71:16:counter_update	32	static
+bit_engine.c:127:16:delay_update	72	static
+bit_engine.c:180:16:update_type_state	24	static
+bit_engine.c:200:16:bit_proces	48	static
+bit_engine.c:317:9:start_bit_engine	32	static

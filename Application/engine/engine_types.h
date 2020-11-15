@@ -109,8 +109,9 @@ struct OUTPUTS
 	TM tim[8];
 	OP par[128];
 	OP_ROOT root_par[16];
-
 	uint16_t branch_n;
-}outputs[OUTPUTS_N];
+} outputs[OUTPUTS_N];
+
+uint8_t outputs_updated_flag;
 
 #endif

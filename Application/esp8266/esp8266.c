@@ -157,9 +157,8 @@ uint8_t ESP_SendData(const char *url, uint16_t port, const char *data, uint32_t 
 	sprintf(request, "AT+CIPSTART=\"TCP\",\"%s\",%d\r\n", url, port);
 	RingBuffClear(&UART2_rx_data);
 	UART2_SendData(request, strlen(request));
-	delay(1000);
 
-	if(waitCallBack("OK", 1000))
+	if(waitCallBack("OK", 2000))
 	{
 		requestFlush();
 		sprintf(request, "AT+CIPSEND=%lu\r\n", dataLength);

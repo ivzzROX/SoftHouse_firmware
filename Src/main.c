@@ -20,29 +20,18 @@ int main(void)
 
 	RTC_Init();
 
-	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
-	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOH);
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
+	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOD);
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);
+	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOH);
 
 	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_SPI2);
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_SPI3);
+
 	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_USART2);
 	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_USART3);
-
-//  MX_GPIO_Init();
-//  MX_ADC1_Init();
-//  MX_I2C1_Init();
-//  MX_I2C2_Init();
-//  MX_SDIO_SD_Init();
-//  MX_SPI1_Init();
-//  MX_SPI2_Init();
-//  MX_SPI3_Init();
-//  MX_USART1_UART_Init();
-//  MX_USART2_UART_Init();
-//  MX_USART3_UART_Init();
-//  MX_FATFS_Init();
 
 	osKernelInitialize();
 	MX_FREERTOS_Init();
@@ -50,7 +39,6 @@ int main(void)
 
 	while (1) {}
 }
-
 
 void SystemClock_Config(void)
 {
@@ -96,7 +84,6 @@ void SystemClock_Config(void)
 	};
 }
 
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM1) {
@@ -113,5 +100,3 @@ void assert_failed(uint8_t *file, uint32_t line)
 { 
 }
 #endif
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -12,6 +12,8 @@
 #include "json_parcer.h"
 #include "ino.h"
 
+#include "w25qxx.h"
+
 #include <string.h>
 
 #include "FreeRTOSConfig.h"
@@ -25,31 +27,16 @@ uint16_t Get_OutValue()
 	return out_value;
 }
 
-void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
-{
-	out[out_n].branch_n = -1;
-	out[out_n].branch_n = json_get_op(buff, out + out_n);
-}
-
-void clear_info(struct OUTPUTS* out, uint16_t out_n)
-{
-	out[out_n].branch_n = 0;
-	memset(out[out_n].par, 0, sizeof(OP));
-	memset(out[out_n].root_par, 0, sizeof(OP_ROOT));
-}
-
 void BitEngine_task( void * pvParameters )
 {
     configASSERT( ( ( uint32_t ) pvParameters ) == 1 );
 
     INO_Init();
 
-    for (uint8_t out_n = 0; out_n < OUTPUTS_N; ++out_n)
-    {
-    	memset(outputs[out_n].t_tr,  0, sizeof(T_TR));
-    	memset(outputs[out_n].rs_tr, 0, sizeof(RS_TR));
-    	clear_info(outputs, out_n);
-    }
+    vTaskDelay(pdMS_TO_TICKS(10));
+
+    memset(outputs, 0, sizeof(outputs));
+
 
     while(1)
     {

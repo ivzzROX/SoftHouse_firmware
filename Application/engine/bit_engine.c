@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 
+//TODO: Refactor triggers and delay, common bodies and different incoming conditions
+
 static uint8_t t_trigger_update(OP_ROOT* root, uint16_t root_n, T_TR* ttr, uint16_t state)
 {
 	if(ttr->root_id == -1)

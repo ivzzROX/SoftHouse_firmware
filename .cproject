@@ -59,6 +59,11 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/ino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/sensor_task}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Application/w25q}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/spi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/w25_task}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Application/requests}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/init_task}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dip/Platform/perih}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER"/>

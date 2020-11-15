@@ -23,36 +23,17 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 void MX_SPI1_Init(void);
 void MX_SPI2_Init(void);
 void MX_SPI3_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 #endif /*__ spi_H */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

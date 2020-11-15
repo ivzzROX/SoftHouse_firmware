@@ -7,7 +7,7 @@
 
 #include "sensor.h"
 #include "uart3.h"
-#include "led_task.h"
+#include "perih.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +31,7 @@ void Sensor_Init(f_ptr delay_function)
 	Sensor_UpdateGpioInit();
 	Sensor_ClearList();
 	delay = delay_function;
-	FST_VALUE[1] = 0;
+	SLed_Set(ON);
 }
 
 uint8_t Sensor_GPIOUpdateList()
@@ -41,7 +41,7 @@ uint8_t Sensor_GPIOUpdateList()
 
 void Sensor_UpdateList()
 {
-	FST_VALUE[1] = 0;
+	SLed_Set(OFF);
 	Sensor_ClearList();
 
 	for(uint32_t addr = 0; addr <= 0xFFFF; ++addr)
@@ -70,7 +70,7 @@ void Sensor_UpdateList()
 
 void Sensor_UpdateValue()
 {
-	FST_VALUE[1] = 1;
+	SLed_Set(ON);
 	for(uint8_t i = 0; i < SENSOR_MAX; ++i)
 	{
 		if(sensor_list[i].addr == 0) {
