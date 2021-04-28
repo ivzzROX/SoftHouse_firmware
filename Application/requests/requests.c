@@ -26,6 +26,17 @@
 const char URL[] = "192.168.1.210";
 const uint16_t PORT = 5002;
 
+#define GENERATE_ENUM(ENUM, STR) ENUM,
+#define GENERATE_STRING(ENUM, STR) STR,
+
+#define FOREACH_REQ_TYPE(REQ_TYPE) \
+		REQ_TYPE(GET,	"GET")   \
+		REQ_TYPE(POST,	"POST")
+
+typedef enum {
+	FOREACH_REQ_TYPE(GENERATE_ENUM)
+} REQ_TYPE_ENUM;
+
 static void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
 {
 	out[out_n].branch_n = -1;
@@ -37,6 +48,11 @@ static void clear_info(struct OUTPUTS* out, uint16_t out_n)
 	out[out_n].branch_n = 0;
 	memset(out[out_n].par, 0, sizeof(OP));
 	memset(out[out_n].root_par, 0, sizeof(OP_ROOT));
+}
+
+static void create_header(char *out, REQ_TYPE_ENUM req_type, const char *url, const char *end_point)
+{
+	sprintf(out, "%s http://%s/%s HTTP/1.1\r\nHost: %s\r\n\r\n", req_type, url, end_point, url);
 }
 
 void ESP_GetJson()

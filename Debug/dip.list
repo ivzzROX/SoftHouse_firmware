@@ -7,15 +7,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         0000b610  08000190  08000190  00010190  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       000005e8  0800b7a0  0800b7a0  0001b7a0  2**2
+  2 .rodata       00000610  0800b7a0  0800b7a0  0001b7a0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM          00000008  0800bd88  0800bd88  0001bd88  2**2
+  3 .ARM          00000008  0800bdb0  0800bdb0  0001bdb0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  4 .init_array   00000004  0800bd90  0800bd90  0001bd90  2**2
+  4 .init_array   00000004  0800bdb8  0800bdb8  0001bdb8  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  5 .fini_array   00000004  0800bd94  0800bd94  0001bd94  2**2
+  5 .fini_array   00000004  0800bdbc  0800bdbc  0001bdbc  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .data         00000228  20000000  0800bd98  00020000  2**2
+  6 .data         00000228  20000000  0800bdc0  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
   7 .ccmram       00000000  10000000  10000000  00020228  2**0
                   CONTENTS
@@ -25,21 +25,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  10 .ARM.attributes 00000030  00000000  00000000  00020228  2**0
                   CONTENTS, READONLY
- 11 .debug_info   0002af28  00000000  00000000  00020258  2**0
+ 11 .debug_info   0002af9a  00000000  00000000  00020258  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_abbrev 00006493  00000000  00000000  0004b180  2**0
+ 12 .debug_abbrev 00006493  00000000  00000000  0004b1f2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_aranges 00001e90  00000000  00000000  00051618  2**3
+ 13 .debug_aranges 00001e98  00000000  00000000  00051688  2**3
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00001bf0  00000000  00000000  000534a8  2**3
+ 14 .debug_ranges 00001bf8  00000000  00000000  00053520  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_line   0000fb85  00000000  00000000  00055098  2**0
+ 15 .debug_line   0000fb97  00000000  00000000  00055118  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_str    00008d19  00000000  00000000  00064c1d  2**0
+ 16 .debug_str    00008d4d  00000000  00000000  00064caf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .comment      0000007c  00000000  00000000  0006d936  2**0
+ 17 .comment      0000007c  00000000  00000000  0006d9fc  2**0
                   CONTENTS, READONLY
- 18 .debug_frame  000087bc  00000000  00000000  0006d9b4  2**2
+ 18 .debug_frame  000087e0  00000000  00000000  0006da78  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -5166,9 +5166,9 @@ uint8_t ESP_SendData(const char *url, uint16_t port, const char *data, uint32_t 
  800270c:	0800b860 	.word	0x0800b860
 
 08002710 <update_info_from_json>:
-
-const char URL[] = "192.168.1.210";
-const uint16_t PORT = 5002;
+typedef enum {
+	FOREACH_REQ_TYPE(GENERATE_ENUM)
+} REQ_TYPE_ENUM;
 
 static void update_info_from_json(char* buff, struct OUTPUTS* out, uint16_t out_n)
 {
@@ -5257,6 +5257,9 @@ static void clear_info(struct OUTPUTS* out, uint16_t out_n)
  80027c6:	bd80      	pop	{r7, pc}
 
 080027c8 <ESP_GetJson>:
+{
+	sprintf(out, "%s http://%s/%s HTTP/1.1\r\nHost: %s\r\n\r\n", req_type, url, end_point, url);
+}
 
 void ESP_GetJson()
 {
@@ -5338,8 +5341,8 @@ void ESP_GetJson()
  8002862:	46bd      	mov	sp, r7
  8002864:	bd80      	pop	{r7, pc}
  8002866:	bf00      	nop
- 8002868:	0800b870 	.word	0x0800b870
- 800286c:	0800ba84 	.word	0x0800ba84
+ 8002868:	0800b898 	.word	0x0800b898
+ 800286c:	0800baac 	.word	0x0800baac
  8002870:	20008ba8 	.word	0x20008ba8
  8002874:	20008ba4 	.word	0x20008ba4
 
@@ -5437,10 +5440,10 @@ void ESP_UpdateTime()
  8002926:	46bd      	mov	sp, r7
  8002928:	bd80      	pop	{r7, pc}
  800292a:	bf00      	nop
- 800292c:	0800b8c4 	.word	0x0800b8c4
- 8002930:	0800ba84 	.word	0x0800ba84
- 8002934:	0800b8b4 	.word	0x0800b8b4
- 8002938:	0800b8bc 	.word	0x0800b8bc
+ 800292c:	0800b8ec 	.word	0x0800b8ec
+ 8002930:	0800baac 	.word	0x0800baac
+ 8002934:	0800b8dc 	.word	0x0800b8dc
+ 8002938:	0800b8e4 	.word	0x0800b8e4
 
 0800293c <RingBuffInit>:
  */
@@ -6838,7 +6841,7 @@ uint32_t HAL_RCC_GetPCLK2Freq(void)
  8003160:	4618      	mov	r0, r3
  8003162:	bd80      	pop	{r7, pc}
  8003164:	40023800 	.word	0x40023800
- 8003168:	0800bac8 	.word	0x0800bac8
+ 8003168:	0800baf0 	.word	0x0800baf0
 
 0800316c <HAL_RCC_GetClockConfig>:
   * will be configured.
@@ -8595,7 +8598,7 @@ uint32_t RCC_GetHCLKClockFreq(uint32_t SYSCLK_Frequency)
  8003ad6:	46bd      	mov	sp, r7
  8003ad8:	bd80      	pop	{r7, pc}
  8003ada:	bf00      	nop
- 8003adc:	0800bab8 	.word	0x0800bab8
+ 8003adc:	0800bae0 	.word	0x0800bae0
 
 08003ae0 <RCC_GetPCLK1ClockFreq>:
   * @brief  Return PCLK1 clock frequency
@@ -8624,7 +8627,7 @@ uint32_t RCC_GetPCLK1ClockFreq(uint32_t HCLK_Frequency)
  8003afe:	46bd      	mov	sp, r7
  8003b00:	bd80      	pop	{r7, pc}
  8003b02:	bf00      	nop
- 8003b04:	0800bac8 	.word	0x0800bac8
+ 8003b04:	0800baf0 	.word	0x0800baf0
 
 08003b08 <RCC_GetPCLK2ClockFreq>:
   * @brief  Return PCLK2 clock frequency
@@ -8653,7 +8656,7 @@ uint32_t RCC_GetPCLK2ClockFreq(uint32_t HCLK_Frequency)
  8003b26:	46bd      	mov	sp, r7
  8003b28:	bd80      	pop	{r7, pc}
  8003b2a:	bf00      	nop
- 8003b2c:	0800bac8 	.word	0x0800bac8
+ 8003b2c:	0800baf0 	.word	0x0800baf0
 
 08003b30 <RCC_PLL_GetFreqDomain_SYS>:
   * @brief  Return PLL clock frequency used for system domain
@@ -15820,7 +15823,7 @@ BaseType_t xReturn;
  80062d6:	3718      	adds	r7, #24
  80062d8:	46bd      	mov	sp, r7
  80062da:	bd80      	pop	{r7, pc}
- 80062dc:	0800b9d8 	.word	0x0800b9d8
+ 80062dc:	0800ba00 	.word	0x0800ba00
  80062e0:	080068f5 	.word	0x080068f5
  80062e4:	20008a1c 	.word	0x20008a1c
  80062e8:	20008a18 	.word	0x20008a18
@@ -17658,7 +17661,7 @@ BaseType_t xReturn = pdFAIL;
  8006cd0:	bd80      	pop	{r7, pc}
  8006cd2:	bf00      	nop
  8006cd4:	20008a54 	.word	0x20008a54
- 8006cd8:	0800b9e0 	.word	0x0800b9e0
+ 8006cd8:	0800ba08 	.word	0x0800ba08
  8006cdc:	08006e15 	.word	0x08006e15
  8006ce0:	20008a58 	.word	0x20008a58
 
@@ -18738,7 +18741,7 @@ static void prvCheckForValidListAndQueue( void )
  80072d0:	20008a50 	.word	0x20008a50
  80072d4:	20008b00 	.word	0x20008b00
  80072d8:	20008a60 	.word	0x20008a60
- 80072dc:	0800b9e8 	.word	0x0800b9e8
+ 80072dc:	0800ba10 	.word	0x0800ba10
 
 080072e0 <Get_OutValue>:
 #include "task.h"
@@ -18937,7 +18940,7 @@ void BitEngine_TaskInit( void )
  8007432:	3708      	adds	r7, #8
  8007434:	46bd      	mov	sp, r7
  8007436:	bd80      	pop	{r7, pc}
- 8007438:	0800b9f0 	.word	0x0800b9f0
+ 8007438:	0800ba18 	.word	0x0800ba18
  800743c:	080072f9 	.word	0x080072f9
 
 08007440 <ESP_Task>:
@@ -19045,8 +19048,8 @@ void ESP_Task( void * pvParameters )
  80074d0:	e7cc      	b.n	800746c <ESP_Task+0x2c>
  80074d2:	bf00      	nop
  80074d4:	080061c5 	.word	0x080061c5
- 80074d8:	0800ba00 	.word	0x0800ba00
- 80074dc:	0800ba0c 	.word	0x0800ba0c
+ 80074d8:	0800ba28 	.word	0x0800ba28
+ 80074dc:	0800ba34 	.word	0x0800ba34
 
 080074e0 <ESP_TaskInit>:
     }
@@ -19080,7 +19083,7 @@ void ESP_TaskInit( void )
  8007502:	3708      	adds	r7, #8
  8007504:	46bd      	mov	sp, r7
  8007506:	bd80      	pop	{r7, pc}
- 8007508:	0800ba20 	.word	0x0800ba20
+ 8007508:	0800ba48 	.word	0x0800ba48
  800750c:	08007441 	.word	0x08007441
 
 08007510 <Init_Task>:
@@ -19178,7 +19181,7 @@ void Init_TaskInit( void )
  800759e:	3708      	adds	r7, #8
  80075a0:	46bd      	mov	sp, r7
  80075a2:	bd80      	pop	{r7, pc}
- 80075a4:	0800ba2c 	.word	0x0800ba2c
+ 80075a4:	0800ba54 	.word	0x0800ba54
  80075a8:	08007511 	.word	0x08007511
 
 080075ac <LL_GPIO_ReadInputPort>:
@@ -20182,7 +20185,7 @@ void Relay_TaskInit( void )
  8007b6a:	46bd      	mov	sp, r7
  8007b6c:	bd80      	pop	{r7, pc}
  8007b6e:	bf00      	nop
- 8007b70:	0800ba38 	.word	0x0800ba38
+ 8007b70:	0800ba60 	.word	0x0800ba60
  8007b74:	08007a7f 	.word	0x08007a7f
 
 08007b78 <Sensor_ClearList>:
@@ -20375,7 +20378,7 @@ void Sensor_UpdateList()
  8007ca0:	46bd      	mov	sp, r7
  8007ca2:	bd80      	pop	{r7, pc}
  8007ca4:	200182d8 	.word	0x200182d8
- 8007ca8:	0800ba44 	.word	0x0800ba44
+ 8007ca8:	0800ba6c 	.word	0x0800ba6c
  8007cac:	20008b54 	.word	0x20008b54
  8007cb0:	20008b64 	.word	0x20008b64
  8007cb4:	20008b52 	.word	0x20008b52
@@ -20566,7 +20569,7 @@ void Sensor_UpdateValue()
  8007df2:	bd80      	pop	{r7, pc}
  8007df4:	20016ce8 	.word	0x20016ce8
  8007df8:	200182d8 	.word	0x200182d8
- 8007dfc:	0800ba4c 	.word	0x0800ba4c
+ 8007dfc:	0800ba74 	.word	0x0800ba74
  8007e00:	20008b54 	.word	0x20008b54
  8007e04:	20008b64 	.word	0x20008b64
 
@@ -20741,7 +20744,7 @@ void Sensor_TaskInit( void )
  8007efa:	46bd      	mov	sp, r7
  8007efc:	bd80      	pop	{r7, pc}
  8007efe:	bf00      	nop
- 8007f00:	0800ba54 	.word	0x0800ba54
+ 8007f00:	0800ba7c 	.word	0x0800ba7c
  8007f04:	08007e8d 	.word	0x08007e8d
 
 08007f08 <LL_GPIO_SetOutputPin>:
@@ -22586,7 +22589,7 @@ void W25_TaskInit( void )
  8008a80:	4903      	ldr	r1, [pc, #12]	; (8008a90 <W25_TaskInit+0x28>)
  8008a82:	4804      	ldr	r0, [pc, #16]	; (8008a94 <W25_TaskInit+0x2c>)
  8008a84:	f7fd f9e8 	bl	8005e58 <xTaskCreate>
-                    "W25_Task",    			 /* Text name for the task. */
+                    "W25_Task",    			 	 /* Text name for the task. */
 					256,	 					 /* Stack size in words, not bytes. */
                     ( void * ) 1,     		 	 /* Parameter passed into the task. */
                     4,				 			 /* Priority at which the task is created. */
@@ -22596,7 +22599,7 @@ void W25_TaskInit( void )
  8008a8a:	3708      	adds	r7, #8
  8008a8c:	46bd      	mov	sp, r7
  8008a8e:	bd80      	pop	{r7, pc}
- 8008a90:	0800ba60 	.word	0x0800ba60
+ 8008a90:	0800ba88 	.word	0x0800ba88
  8008a94:	08008a05 	.word	0x08008a05
 
 08008a98 <MX_FREERTOS_Init>:
@@ -22635,7 +22638,7 @@ void MX_FREERTOS_Init(void)
 }
  8008ac4:	bf00      	nop
  8008ac6:	bd80      	pop	{r7, pc}
- 8008ac8:	0800ba94 	.word	0x0800ba94
+ 8008ac8:	0800babc 	.word	0x0800babc
  8008acc:	08008ad5 	.word	0x08008ad5
  8008ad0:	200192dc 	.word	0x200192dc
 
@@ -23245,7 +23248,6 @@ int main(void)
 08008ec0 <SystemClock_Config>:
 }
 
-
 void SystemClock_Config(void)
 {
  8008ec0:	b580      	push	{r7, lr}
@@ -23357,7 +23359,6 @@ void SystemClock_Config(void)
  8008f7c:	0a037a00 	.word	0x0a037a00
 
 08008f80 <HAL_TIM_PeriodElapsedCallback>:
-
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -24612,7 +24613,7 @@ LoopFillZerobss:
   ldr   sp, =_estack     /* set stack pointer */
  8009704:	20020000 	.word	0x20020000
   ldr  r3, =_sidata
- 8009708:	0800bd98 	.word	0x0800bd98
+ 8009708:	0800bdc0 	.word	0x0800bdc0
   ldr  r0, =_sdata
  800970c:	20000000 	.word	0x20000000
   ldr  r3, =_edata
@@ -24665,10 +24666,10 @@ Infinite_Loop:
  800975e:	4798      	blx	r3
  8009760:	3501      	adds	r5, #1
  8009762:	e7f2      	b.n	800974a <__libc_init_array+0x1e>
- 8009764:	0800bd90 	.word	0x0800bd90
- 8009768:	0800bd90 	.word	0x0800bd90
- 800976c:	0800bd90 	.word	0x0800bd90
- 8009770:	0800bd94 	.word	0x0800bd94
+ 8009764:	0800bdb8 	.word	0x0800bdb8
+ 8009768:	0800bdb8 	.word	0x0800bdb8
+ 800976c:	0800bdb8 	.word	0x0800bdb8
+ 8009770:	0800bdbc 	.word	0x0800bdbc
 
 08009774 <localtime_r>:
  8009774:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
@@ -24860,7 +24861,7 @@ Infinite_Loop:
  800992e:	e7dd      	b.n	80098ec <localtime_r+0x178>
  8009930:	2301      	movs	r3, #1
  8009932:	e7f9      	b.n	8009928 <localtime_r+0x1b4>
- 8009934:	0800bb3c 	.word	0x0800bb3c
+ 8009934:	0800bb64 	.word	0x0800bb64
  8009938:	20008b94 	.word	0x20008b94
 
 0800993c <__locale_ctype_ptr_l>:
@@ -25125,7 +25126,7 @@ Infinite_Loop:
  8009b7e:	60e2      	str	r2, [r4, #12]
  8009b80:	6126      	str	r6, [r4, #16]
  8009b82:	e797      	b.n	8009ab4 <validate_structure+0xec>
- 8009b84:	0800badc 	.word	0x0800badc
+ 8009b84:	0800bb04 	.word	0x0800bb04
 
 08009b88 <mktime>:
  8009b88:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -25387,7 +25388,7 @@ Infinite_Loop:
  8009e6c:	f8d8 5020 	ldr.w	r5, [r8, #32]
  8009e70:	443d      	add	r5, r7
  8009e72:	e721      	b.n	8009cb8 <mktime+0x130>
- 8009e74:	0800bb0c 	.word	0x0800bb0c
+ 8009e74:	0800bb34 	.word	0x0800bb34
  8009e78:	00015180 	.word	0x00015180
  8009e7c:	20008b94 	.word	0x20008b94
 
@@ -25759,7 +25760,7 @@ Infinite_Loop:
  800a1e4:	2000      	movs	r0, #0
  800a1e6:	e7b7      	b.n	800a158 <__tzcalc_limits+0xb8>
  800a1e8:	00015180 	.word	0x00015180
- 800a1ec:	0800bb3c 	.word	0x0800bb3c
+ 800a1ec:	0800bb64 	.word	0x0800bb64
 
 0800a1f0 <__tz_lock>:
  800a1f0:	4770      	bx	lr
@@ -26052,17 +26053,17 @@ Infinite_Loop:
  800a4ce:	723b      	strb	r3, [r7, #8]
  800a4d0:	6178      	str	r0, [r7, #20]
  800a4d2:	e781      	b.n	800a3d8 <_tzset_unlocked_r+0x1d8>
- 800a4d4:	0800bb9c 	.word	0x0800bb9c
+ 800a4d4:	0800bbc4 	.word	0x0800bbc4
  800a4d8:	20008b90 	.word	0x20008b90
  800a4dc:	20008b98 	.word	0x20008b98
- 800a4e0:	0800bb9f 	.word	0x0800bb9f
+ 800a4e0:	0800bbc7 	.word	0x0800bbc7
  800a4e4:	20008b94 	.word	0x20008b94
  800a4e8:	200001e0 	.word	0x200001e0
  800a4ec:	20008b83 	.word	0x20008b83
- 800a4f0:	0800bba3 	.word	0x0800bba3
- 800a4f4:	0800bbc6 	.word	0x0800bbc6
- 800a4f8:	0800bbb2 	.word	0x0800bbb2
- 800a4fc:	0800bbc5 	.word	0x0800bbc5
+ 800a4f0:	0800bbcb 	.word	0x0800bbcb
+ 800a4f4:	0800bbee 	.word	0x0800bbee
+ 800a4f8:	0800bbda 	.word	0x0800bbda
+ 800a4fc:	0800bbed 	.word	0x0800bbed
  800a500:	20008b78 	.word	0x20008b78
 
 0800a504 <__ascii_wctomb>:
@@ -26712,9 +26713,9 @@ Infinite_Loop:
  800ab00:	4640      	mov	r0, r8
  800ab02:	f000 f881 	bl	800ac08 <_printf_i>
  800ab06:	e7ea      	b.n	800aade <_svfiprintf_r+0x1aa>
- 800ab08:	0800bcd9 	.word	0x0800bcd9
- 800ab0c:	0800bcdf 	.word	0x0800bcdf
- 800ab10:	0800bce3 	.word	0x0800bce3
+ 800ab08:	0800bd01 	.word	0x0800bd01
+ 800ab0c:	0800bd07 	.word	0x0800bd07
+ 800ab10:	0800bd0b 	.word	0x0800bd0b
  800ab14:	00000000 	.word	0x00000000
  800ab18:	0800a87d 	.word	0x0800a87d
 
@@ -27053,8 +27054,8 @@ Infinite_Loop:
  800ae36:	f884 3042 	strb.w	r3, [r4, #66]	; 0x42
  800ae3a:	f104 0542 	add.w	r5, r4, #66	; 0x42
  800ae3e:	e765      	b.n	800ad0c <_printf_i+0x104>
- 800ae40:	0800bcfb 	.word	0x0800bcfb
- 800ae44:	0800bcea 	.word	0x0800bcea
+ 800ae40:	0800bd23 	.word	0x0800bd23
+ 800ae44:	0800bd12 	.word	0x0800bd12
 
 0800ae48 <_sbrk_r>:
  800ae48:	b538      	push	{r3, r4, r5, lr}
@@ -27693,7 +27694,7 @@ Infinite_Loop:
  800b3de:	e7f9      	b.n	800b3d4 <__ssvfiscanf_r+0x28c>
  800b3e0:	0800b095 	.word	0x0800b095
  800b3e4:	0800b10f 	.word	0x0800b10f
- 800b3e8:	0800bcdf 	.word	0x0800bcdf
+ 800b3e8:	0800bd07 	.word	0x0800bd07
  800b3ec:	00000000 	.word	0x00000000
 
 0800b3f0 <_scanf_chars>:
@@ -27988,10 +27989,10 @@ Infinite_Loop:
  800b68a:	2001      	movs	r0, #1
  800b68c:	e7fa      	b.n	800b684 <_scanf_i+0x1cc>
  800b68e:	bf00      	nop
- 800b690:	0800ba78 	.word	0x0800ba78
+ 800b690:	0800baa0 	.word	0x0800baa0
  800b694:	0800afbd 	.word	0x0800afbd
  800b698:	0800a051 	.word	0x0800a051
- 800b69c:	0800bd1c 	.word	0x0800bd1c
+ 800b69c:	0800bd44 	.word	0x0800bd44
 
 0800b6a0 <__sccl>:
  800b6a0:	b570      	push	{r4, r5, r6, lr}

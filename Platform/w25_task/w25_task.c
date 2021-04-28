@@ -58,8 +58,8 @@ void W25_TaskInit( void )
 {
 	TaskHandle_t xHandle = NULL;
     xTaskCreate(
-    				W25_Task,      			 /* Function that implements the task. */
-                    "W25_Task",    			 /* Text name for the task. */
+    				W25_Task,      			 	 /* Function that implements the task. */
+                    "W25_Task",    			 	 /* Text name for the task. */
 					256,	 					 /* Stack size in words, not bytes. */
                     ( void * ) 1,     		 	 /* Parameter passed into the task. */
                     4,				 			 /* Priority at which the task is created. */
